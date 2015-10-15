@@ -1,0 +1,128 @@
+<!-- Copyright (c) 2015 P.Y. Laligand -->
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="member-list">
+
+  <style>
+  :host {
+    --paper-card-content: {
+      height: 100%;
+      min-height: 100%;
+      padding: 0px;
+      @apply(--layout-horizontal);
+    };
+    /* TODO(pylaligand): contribute fix. */
+    --paper-icon-button: {
+      height: 24px;
+    };
+    --paper-menu: {
+      width: 158px;
+    }
+  }
+
+  .list {
+    @apply(--layout-horizontal);
+    @apply(--layout-wrap);
+  }
+
+  .member-card {
+    margin: 15px;
+    padding: 5px;
+    width: 500px;
+    height: 261px;
+  }
+
+  .title {
+    @apply(--layout-horizontal);
+    @apply(--layout-center);
+  }
+
+  .info-panel {
+    @apply(--layout-vertical);
+    @apply(--layout-flex);
+    @apply(--layout-end);
+    @apply(--layout-justified);
+    padding-bottom: 10px;
+  }
+
+  .gamertag {
+    font-weight: bold;
+    font-size: 30px;
+  }
+
+  </style>
+
+  <template>
+    <div class="list">
+      <template is="dom-repeat" items="{{users}}" as="user">
+        <paper-card class="member-card">
+          <div class="card-content">
+            <div class="g-person" data-width="180" data-href$="{{_gplusUrl(user)}}" data-theme="light" data-showtagline="false" data-showcoverphoto="false" data-rel="author"></div>
+            <div class="info-panel">
+              <div class="title">
+                <div class="gamertag">{{user.platformId}}</div>
+                <paper-menu-button horizontal-align="right">
+                  <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
+                  <paper-menu class="dropdown-content" on-iron-select="menuItemSelected">
+                    <paper-icon-item>
+                      <iron-icon src="../images/icon_xbox.png" item-icon></iron-icon>
+                      <div>Xbox Live</div>
+                    </paper-icon-item>
+                    <paper-icon-item>
+                      <iron-icon src="../images/icon_destiny.png" item-icon></iron-icon>
+                      <div>Bungie</div>
+                    </paper-icon-item>
+                  </paper-menu>
+                </paper-menu-button>
+              </div>
+            </div>
+          </div>
+        </paper-card>
+      </template>
+    </div>
+  </template>
+
+  <script>
+  Polymer({
+    is: 'member-list',
+
+    properties: {
+      users: {
+        type: Array,
+      }
+    },
+
+    // Called when a menu item is selected on any card.
+    menuItemSelected: function(e) {
+      var user = e.model.user;
+      var index = e.target.selected;
+      var url = this._getNavigationUrl(user, index);
+      this.fire('member-navigate', {url:url});
+    },
+
+    // Returns the navigation URL for a user's menu option.
+    _getNavigationUrl: function(user, index) {
+      switch (index) {
+        case 0: return 'https://account.xbox.com/en-US/Profile?GamerTag=' + user.platformId;
+        case 1: return 'https://www.bungie.net/en/Profile/254/' + user.bungieId;
+        default: return 'http://whereisxur.com';
+      }
+    },
+
+    // Generates a widget URL for the given user.
+    _gplusUrl: function(user) {
+      return '//plus.google.com/u/0/' + user.gplusId;
+    }
+  });
+  </script>
+
+</dom-module>
