@@ -16,10 +16,9 @@
 
   $(function() {
     // Read the data from a file.
-    // Using the .txt extension so that the data does not get automatically
-    // parsed.
-    $.get('data/xbl.json.txt', function(data) {
-      $('#allUsers')[0].setAttribute('users', data);
+    $.getJSON('data/userdata.json', function(data) {
+      var xblUsers = JSON.stringify(data['xblUsers']);
+      $('#allUsers')[0].setAttribute('users', xblUsers);
 
       // Load Google+ badges now that the DOM has been fully loaded.
       $.getScript('https://apis.google.com/js/platform.js', function() {
