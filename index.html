@@ -1,22 +1,135 @@
 <html>
 
 <head>
-  <title>
-    gDestiny
-  </title>
 
-  <!-- Twitter list -->
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+  <title>gDestiny</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- Polymer initialization-->
+  <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+  <!-- Polymer -->
+  <link rel="import" href="bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+  <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+
+  <!-- Custom elements -->
+  <link rel="import" href="elements/member_list.html">
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 
   <!-- Community badge -->
   <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <style>
+  body {
+    margin: 0px;
+    background-color: #e5e5e5;
+  }
+
+  .paper-header {
+    height: 166px;
+    font-size: 50px;
+    line-height: 166px;
+    color: white;
+    transition: height 0.2s;
+    background-image: url(images/destiny-banner.png);
+    background-repeat: no-repeat;
+    background-color: #011122;
+  }
+
+  .paper-header.tall {
+    height: 289px;
+  }
+
+  .paper-icon-button {
+    height: 24px;
+  }
+
+  #tabs {
+    width: 500px;
+  }
+
+  .paper-tab {
+    font-variant: small-caps;
+    font-size: 30px;
+  }
+
+  #home {
+    padding-top: 20px;
+  }
+  </style>
+
+  <script type="text/javascript">
+    window.addEventListener('WebComponentsReady', function(e) {
+      var navigator = function(e) {
+        console.log('navigate!');
+        var url = e.originalEvent.detail.url;
+        window.open(url, '_blank');
+      };
+
+      $('#tabs').bind('iron-select', function(e) {
+        var index = e.originalEvent.target.selected;
+        var pages = $('#pages')[0];
+        var element = pages.children[index];
+
+        // Load the element if needed.
+        if (index > 0 && element.children.length == 0) {
+          var memberList = element.appendChild(new MemberList());
+          var isXbox = index == 1;
+          var dataAttribute = isXbox ? 'xblUsers' : 'psnUsers';
+          $.getJSON('data/userdata.json', function(data) {
+            var users = JSON.stringify(data[dataAttribute]);
+            if (isXbox) {
+              memberList.setAttribute('is-xbox', 'pointless value');
+            }
+            memberList.setAttribute('users', users);
+
+            // Load Google+ badges now that the DOM has been fully loaded.
+            $.getScript('https://apis.google.com/js/platform.js', function() {
+              gapi.person.go();
+            });
+
+            $(memberList).bind('member-navigate', navigator);
+          });
+        }
+
+        pages.select(index);
+      });
+    });
+  </script>
+
 </head>
 
 <body>
-  <center>
-    <div class="g-community" data-width="520" data-href="https://plus.google.com/u/0/communities/109300757687205207528"></div>
-    <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/silverpy/lists/destiny" data-widget-id="641270978144632836">Tweets from https://twitter.com/silverpy/lists/destiny</a>
-  </center>
+
+  <paper-header-panel mode="waterfall-tall">
+
+    <div class="paper-header layout vertical end-justified">
+      <paper-tabs id="tabs" class="self-end" selected="0">
+        <paper-tab>Home</paper-tab>
+        <paper-tab>Xbox</paper-tab>
+        <paper-tab>PSN</paper-tab>
+      </paper-tabs>
+    </div>
+
+    <div class="content">
+      <iron-pages id="pages" selected="0">
+        <div id="home">
+          <center>
+            <div class="g-community" data-width="250" data-href="https://plus.google.com/u/0/communities/109300757687205207528"></div>
+          </center>
+        </div>
+        <div><!-- XBL --></div>
+        <div><!-- PSN --></div>
+      </iron-pages>
+    </div>
+
+  </paper-header-panel>
+
 </body>
 
 </html>
