@@ -38,6 +38,7 @@
   .list {
     @apply(--layout-horizontal);
     @apply(--layout-wrap);
+    @apply(--layout-justified);
   }
 
   .title {
@@ -63,16 +64,18 @@
             <div class="title">
               <div class="gamertag">{{user.platformId}}</div>
               <paper-menu-button horizontal-align="right">
-                <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
+                <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
                 <paper-menu class="dropdown-content" on-iron-select="menuItemSelected">
-                  <paper-icon-item>
-                    <iron-icon src="../images/icon_xbox.png" item-icon></iron-icon>
-                    <div>Xbox Live</div>
-                  </paper-icon-item>
                   <paper-icon-item>
                     <iron-icon src="../images/icon_destiny.png" item-icon></iron-icon>
                     <div>Bungie</div>
                   </paper-icon-item>
+                  <template is="dom-if" if="{{isXbox}}">
+                    <paper-icon-item>
+                      <iron-icon src="../images/icon_xbox.png" item-icon></iron-icon>
+                      <div>Xbox Live</div>
+                    </paper-icon-item>
+                  </template>
                 </paper-menu>
               </paper-menu-button>
             </div>
@@ -84,13 +87,12 @@
   </template>
 
   <script>
-  Polymer({
+  MemberList = Polymer({
     is: 'member-list',
 
     properties: {
-      users: {
-        type: Array,
-      }
+      users: Array,
+      isXbox: Boolean
     },
 
     // Called when a menu item is selected on any card.
@@ -104,8 +106,8 @@
     // Returns the navigation URL for a user's menu option.
     _getNavigationUrl: function(user, index) {
       switch (index) {
-        case 0: return 'https://account.xbox.com/en-US/Profile?GamerTag=' + user.platformId;
-        case 1: return 'https://www.bungie.net/en/Profile/254/' + user.bungieId;
+        case 0: return 'https://www.bungie.net/en/Profile/254/' + user.bungieId;
+        case 1: return 'https://account.xbox.com/en-US/Profile?GamerTag=' + user.platformId;
         default: return 'http://whereisxur.com';
       }
     },
