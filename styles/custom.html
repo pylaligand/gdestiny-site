@@ -1,0 +1,131 @@
+<style is="custom-style">
+  :root {
+    --paper-card-header-text: {
+      font-weight: 300;
+    };
+
+    --paper-tabs: {
+      color: #fff;
+      font-weight:300;
+      font-size: 20px;
+    };
+  }
+
+  paper-tab[link] a {
+    /* These mixins (from iron-flex-layout) center the link text. */
+    @apply(--layout-horizontal);
+    @apply(--layout-center-center);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .paper-header {
+    background-repeat: no-repeat;
+    background-color: #011122;
+    color: white;
+    font-size: 16px;
+    line-height: 20px;
+    transition: height 0.2s;
+  }
+
+  /* TODO(john-mikhail): Look into having rotating banner images for every
+                         page load */
+  /* Add a gradiant to the header iamges to darken the bottom half of the image
+     so the tab colors don't get lost */
+  .paper-header.home {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6)), url(../images/destiny-banner-traveler2.jpg);
+  }
+
+  .paper-header.featured {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6)), url(../images/destiny-banner-moon-whole.jpg);
+  }
+
+  .paper-header.stats {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6)), url(../images/destiny-banner-venus-whole.jpg);
+  }
+
+  .paper-header.tall {
+    height: 368px;
+  }
+
+  .content {
+    min-height: 500px;
+  }
+
+  .cover {
+    margin: 200px;
+  }
+
+  /* Support for mobile devices */
+  @media (max-device-width: 770px) {
+    .cover {
+      margin: 100px 0;
+    }
+  }
+
+  paper-card {
+    margin-bottom: 16px;
+    padding: 8px 16px;
+  }
+
+  paper-card.motd {
+    border-left: 2px solid #fab700;
+    background-color: #fffde7;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  paper-icon-button {
+    color: var(--paper-grey-600);
+  }
+
+  paper-icon-button.white {
+    color: white !important;
+  }
+
+  .card {
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+    margin-bottom: 8px;
+  }
+
+  /** Featured guardian styles */
+  paper-card.fg {
+    @apply(--layout-horizontal);
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+  }
+
+  .fg-image {
+    width: 70%;
+    height: 200px;
+    background: url('http://www.bungie.net/pubassets/90386/header_frontpage.jpg?cv=3983621215&av=1083700426');
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fg-header {
+    @apply(--paper-font-headline);
+    font-weight: 300;
+  }
+
+  .fg-detail-container {
+  }
+
+  .fg-content {
+    @apply(--layout-flex);
+    float: left;
+  }
+
+  .fg-name {
+    margin: 10px 0;
+  }
+
+  .fg-detail {
+    margin: 10px 0;
+  }
+</style>
