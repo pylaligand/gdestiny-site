@@ -9,6 +9,7 @@
   <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
 
   <!-- Polymer -->
+  <link rel="import" href="bower_components/google-youtube/google-youtube.html">
   <link rel="import" href="bower_components/iron-collapse/iron-collapse.html">
   <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="bower_components/iron-icons/iron-icons.html">
@@ -30,7 +31,14 @@
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script type="text/javascript" src="js/gdestiny.js"></script>
 
+  <!-- Owl Carousel -->
+  <script src="third-party/owl-carousel/owl.carousel.js"></script>
+
   <link rel="stylesheet" href="styles/gdestiny.css">
+
+  <!-- Owl carousel styles -->
+  <link rel="stylesheet" href="third-party/owl-carousel/owl.carousel.css">
+  <link rel="stylesheet" href="third-party/owl-carousel/owl.theme.css">
 </head>
 <!-- TODO(john-mikhail): Need to break up the page chrome into a template and
                          reuse so that we don't copy all this stuff on
@@ -109,6 +117,29 @@
         <div class="fg-image"></div>
       </paper-card>
 
+      <!-- Youtube highlights -->
+      <paper-card heading="Memorable Moments">
+        <div class="card-content">
+          <div id="memorable-moments">
+            <div class="item"><google-youtube video-id="qq_JSnisPi8" chromeless="true"></google-youtube></div>
+            <div class="item"><google-youtube video-id="cxp3FxKr3s8" chromeless="true"></google-youtube></div>
+            <div class="item"><google-youtube video-id="aYKAg4WY1BU" chromeless="true"></google-youtube></div>
+            <div class="item"><google-youtube video-id="jrQzNgzXv5Y" chromeless="true"></google-youtube></div>
+          </div>
+        </div>
+      </paper-card>
+
+      <script>
+        $(document).ready(function() {
+
+          $("#memorable-moments").owlCarousel({
+            items : 2,
+            itemsDesktop : [1199,2],
+            itemsDesktopSmall : [979,1]
+          });
+
+        });
+      </script>
     </div>
   </paper-header-panel>
 </body>
