@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>gDestiny - Clan Stats</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <!-- Roboto font -->
+  <link href="http://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" type="text/css">
+
+  <!-- Polymer initialization-->
+  <script src="components/webcomponentsjs/webcomponents.min.js"></script>
+
+  <!-- Polymer imports -->
+  <link rel="import" href="common.html">
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="components/jquery/dist/jquery.js"></script>
+
+  <!-- Community badge -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script type="text/javascript" src="js/gdestiny.js"></script>
+
+  <link rel="stylesheet" href="styles/gdestiny.css">
+</head>
+
+<body>
+  <paper-header-panel mode="cover">
+    <div class="paper-header stats tall"></div>
+    <!-- Content of the entire site.  Uses the cover mode so the page will
+         flow down the middle with the header being static -->
+    <div class="content cover">
+      <paper-tabs selected="2" noink>
+        <paper-tab link tabindex="-1"><a href="/index.html">Home</a></paper-tab>
+        <paper-tab link tabindex="-1"><a href="/featured.html">Featured Members</a></paper-tab>
+        <paper-tab link tabindex="-1"><a href="/stats.html">Clan Stats</a></paper-tab>
+      </paper-tabs>
+
+      <paper-card class="motd">
+        <div class="card-content">
+          Want ultimate bragging rights?  Then ask no more.  We're working on adding
+          dynamic clan stats and leaderboards to provide you with a glimpse into how
+          you fare individually and against your fellow guardians.
+        </div>
+      </paper-card>
+    </div>
+  </paper-header-panel>
+
+  <gdestiny-analytics key="UA-81409202-1"></gdestiny-analytics>
+</body>
+</html>

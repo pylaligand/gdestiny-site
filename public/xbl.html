@@ -1,0 +1,57 @@
+<html>
+
+<head>
+
+  <title>gDestiny</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- Polymer -->
+  <script src="components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="elements/member_list.html">
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="components/jquery/dist/jquery.js"></script>
+
+  <script type="text/javascript">
+
+  $(function() {
+    // Read the data from a file.
+    $.getJSON('data/userdata.json', function(data) {
+      var xblUsers = JSON.stringify(data['xblUsers']);
+      $('#allUsers')[0].setAttribute('users', xblUsers);
+
+      // Load Google+ badges now that the DOM has been fully loaded.
+      $.getScript('https://apis.google.com/js/platform.js', function() {
+        gapi.person.go();
+      });
+    });
+  });
+
+  // Add a listener for navigation requests.
+  window.addEventListener('WebComponentsReady', function(e) {
+    $('#allUsers').bind('member-navigate', function(e) {
+      console.log('navigate!');
+      var url = e.originalEvent.detail.url;
+      window.open(url, '_blank');
+    });
+  });
+
+  </script>
+
+  <style>
+
+  body {
+    background-color: #e5e5e5;
+  }
+
+  </style>
+
+</head>
+
+<body>
+
+  <member-list id="allUsers"></member-list>
+
+</body>
+
+</html>
