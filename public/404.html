@@ -1,9 +1,52 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>Hundred Zeros</title>
-  </head>
-  <body>
-    <h1>Page Not Found!</h1>
-  </body>
+<head>
+  <title>Whoops...Can't Find That Page</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <!-- Roboto font -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="styles/gdestiny.css">
+
+  <!-- Since these styles are only for the 404 page, do not include them
+       in the gdestiny.css file so they're not included in every page -->
+  <style>
+    .bubble {
+      background: #BDBDBD;
+      border-radius: 10px;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      height: 30px;
+      padding: 10px 0 0 10px;
+      position: relative;
+      width: 250px;
+    }
+
+    .bubble:after {
+      border-color: #BDBDBD transparent;
+      border-style: solid;
+      border-width: 15px 20px 0;
+      bottom: -15px;
+      content: '';
+      display: block;
+      left: 177px;
+      position: absolute;
+      width: 0;
+      z-index: 1;
+    }
+
+    .ghost-404 {
+      left: 50%;
+      margin-top: -15%;
+      margin-left: -20%;
+      position: absolute;
+      top: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div class="ghost-404">
+    <h3 class="bubble">You seem lost Guardian?</h3>
+    <img src="images/animated-ghost.gif"></img>
+  </div>
+</body>
 </html>
