@@ -1,0 +1,47 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<dom-module id="gdestiny-footer">
+  <style>
+    .footer {
+      border-top: 1px solid #efefef;
+      font-size: 13px;
+      font-weight: 100;
+      margin: 16px;
+      padding-top: 20px;
+    }
+
+    .footer .left {
+      float: left;
+    }
+
+    .footer .right {
+      float: right;
+    }
+
+    .footer img {
+      width: 20px;
+      vertical-align: middle;
+    }
+  </style>
+  <template>
+    <div class="footer">
+      <div class="left">
+        2016 © hundredzeros.net
+        <br>
+        This site is developed by clan members and is not financed by or associated with
+        <a href="www.bungie.net" target="_blank">Bungie</a> in any way.
+        <br>
+        Data and media used on this site is the property of
+        <a href="www.bungie.net" target="_blank">Bungie</a>.
+      </div>
+      <div class="right">
+        <a href="https://github.com/pylaligand/gdestiny-site">Contact us <img src="../images/github-32.png"></img></a>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gdestiny-footer'
+    });
+  </script>
+</dom-module>
