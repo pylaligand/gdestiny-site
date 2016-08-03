@@ -13,6 +13,8 @@
 
   <!-- jQuery -->
   <script type="text/javascript" src="components/jquery/dist/jquery.js"></script>
+  <!-- Stats logic -->
+  <script type="text/javascript" src="js/stats.js"></script>
 
   <link rel="stylesheet" href="styles/gdestiny.css">
 </head>
@@ -29,11 +31,9 @@
         <paper-tab link tabindex="-1"><a href="/stats.html">Clan Stats</a></paper-tab>
       </paper-tabs>
 
-      <paper-card class="motd">
-        <div class="card-content">
-          Want ultimate bragging rights?  Then ask no more.  We're working on adding
-          dynamic clan stats and leaderboards to provide you with a glimpse into how
-          you fare individually and against your fellow guardians.
+      <paper-card heading="Grimoire // Leaderboard" class="charts">
+        <div class="content grimoire">
+          <div id="grimoire-chart"></div>
         </div>
       </paper-card>
     </div>

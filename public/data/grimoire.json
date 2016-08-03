@@ -1,0 +1,50 @@
+{
+  "max-grimoire": 5015,
+  "data": [
+    {
+      "name": "fathert0m",
+      "grimoire": 4975,
+      "platform": "xb"
+    },
+    {
+      "name": "Oryx",
+      "grimoire": 4975,
+      "platform": "psn"
+    },
+    {
+      "name": "mscherme",
+      "grimoire": 4905,
+      "platform": "xb"
+    },
+    {
+      "name": "greggoth",
+      "grimoire": 4900,
+      "platform": "xb"
+    },
+    {
+      "name": "Crota",
+      "grimoire": 4800,
+      "platform": "psn"
+    },
+    {
+      "name": "TheMikhail",
+      "grimoire": 4700,
+      "platform": "xb"
+    },
+    {
+      "name": "Red Shirt Thrall",
+      "grimoire": 4600,
+      "platform": "psn"
+    },
+    {
+      "name": "xx new guy xx",
+      "grimoire": 4255,
+      "platform": "xb"
+    },
+    {
+      "name": "txt4nrg",
+      "grimoire": 2850,
+      "platform": "xb"
+    }
+  ]
+}
