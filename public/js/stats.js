@@ -9,9 +9,9 @@ function renderGrimoire() {
     var rows = [
       ["Gamertag", "Grimoire", { role: "style" }]
     ];
-    $.each(json['data'], function(index, value) {
-      var color = value["platform"] == "xb" ? "#64DD17" : "#29B6F6";
-      rows.push([value['name'], value['grimoire'], color]);
+    $.each(json.data, function(index, value) {
+      var color = value.platform == "xb" ? "#64DD17" : "#29B6F6";
+      rows.push([value.name, value.grimoire, color]);
     });
 
     var dataTable = google.visualization.arrayToDataTable(rows);
