@@ -5,7 +5,7 @@ $.getScript("https://www.gstatic.com/charts/loader.js", function(){
 });
 
 function renderGrimoire() {
-  $.getJSON('data/grimoire.json', function(json) {
+  $.getJSON('https://gdestiny-server.herokuapp.com/grimoire', function(json) {
     var rows = [
       ["Gamertag", "Grimoire", { role: "style" }]
     ];

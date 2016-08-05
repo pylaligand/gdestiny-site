@@ -1,36 +1,33 @@
 <link rel="import" href="../components/polymer/polymer.html">
-<dom-module id="gdestiny-footer">
-  <style>
-    :host {
-    }
-
-    .footer {
-      background-color: #fff;
-      border-top: 1px solid #efefef;
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 100;
-      margin: 16px 0;
-      padding: 20px 0;
-      width: 100%;
-    }
-
-    .footer .left {
-      float: left;
-      margin-left: 20px;
-    }
-
-    .footer .right {
-      float: right;
-      margin-right: 20px;
-    }
-
-    .footer img {
-      width: 20px;
-      vertical-align: middle;
-    }
-  </style>
+<dom-module id="zero-footer">
   <template>
+    <style>
+      .footer {
+        background-color: #fff;
+        border-top: 1px solid #efefef;
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 100;
+        margin: 16px 0 0 0;
+        padding: 20px 0;
+        width: 100%;
+      }
+
+      .footer .left {
+        float: left;
+        margin-left: 20px;
+      }
+
+      .footer .right {
+        float: right;
+        margin-right: 20px;
+      }
+
+      .footer img {
+        width: 20px;
+        vertical-align: middle;
+      }
+    </style>
     <div class="footer">
       <div class="left">
         2016 © hundredzeros.net
@@ -51,7 +48,7 @@
 
   <script>
     Polymer({
-      is: 'gdestiny-footer'
+      is: 'zero-footer'
     });
   </script>
 </dom-module>

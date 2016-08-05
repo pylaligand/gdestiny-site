@@ -1,0 +1,57 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<dom-module id="zero-footer">
+  <style>
+    :host {
+    }
+
+    .footer {
+      background-color: #fff;
+      border-top: 1px solid #efefef;
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 100;
+      margin: 16px 0;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .footer .left {
+      float: left;
+      margin-left: 20px;
+    }
+
+    .footer .right {
+      float: right;
+      margin-right: 20px;
+    }
+
+    .footer img {
+      width: 20px;
+      vertical-align: middle;
+    }
+  </style>
+  <template>
+    <div class="footer">
+      <div class="left">
+        2016 © hundredzeros.net
+        <br>
+        This site is developed by clan members and is not financed by or associated with
+        <a href="www.bungie.net" target="_blank">Bungie</a> in any way.
+        <br>
+        Data and media used on this site is the property of
+        <a href="www.bungie.net" target="_blank">Bungie</a>.
+      </div>
+      <div class="right">
+        <a href="mailto:cayde@gdestiny.com" target="_blank">
+          Contact us <img src="../images/icon_destiny.png"/>
+        </a>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'zero-footer'
+    });
+  </script>
+</dom-module>

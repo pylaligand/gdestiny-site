@@ -1,128 +1,195 @@
+<!doctype html>
 <html>
 <head>
-  <title>gDestiny</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <title>Hundred Zeros</title>
+
   <link rel="icon" type="image/png" href="images/favicon.png">
-  <!-- Roboto font -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" type="text/css">
 
-  <!-- Polymer initialization-->
-  <script src="components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
 
-  <!-- Polymer imports -->
-  <link rel="import" href="components/google-youtube/google-youtube.html">
-  <link rel="import" href="components/paper-button/paper-button.html">
-  <link rel="import" href="components/paper-card/paper-card.html">
-  <link rel="import" href="common.html">
+  <link rel="import" href="/elements/zero-analytics.html">
+  <link rel="import" href="/elements/zero-footer.html">
+  <link rel="import" href="/elements/zero-stats.html">
 
-  <!-- jQuery -->
-  <script type="text/javascript" src="components/jquery/dist/jquery.js"></script>
+  <link rel="import" href="/components/app-layout/app-scroll-effects/effects/parallax-background.html">
+  <link rel="import" href="/components/app-layout/app-box/app-box.html">
+  <link rel="import" href="/components/iron-icons/iron-icons.html">
+  <link rel="import" href="/components/google-youtube/google-youtube.html">
+  <link rel="import" href="/components/paper-icon-button/paper-icon-button.html">
 
-  <!-- Owl Carousel -->
-  <script src="components/owlcarousel/owl-carousel/owl.carousel.js"></script>
+  <script type="text/javascript" src="/components/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="/components/owlcarousel/owl-carousel/owl.carousel.js"></script>
+  <link rel="stylesheet" href="/components/owlcarousel/owl-carousel/owl.carousel.css">
+  <link rel="stylesheet" href="/components/owlcarousel/owl-carousel/owl.theme.css">
 
-  <link rel="stylesheet" href="styles/gdestiny.css">
+  <style is="custom-style">
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      background-color: #eee;
+    }
 
-  <!-- Owl carousel styles -->
-  <link rel="stylesheet" href="components/owlcarousel/owl-carousel/owl.carousel.css">
-  <link rel="stylesheet" href="components/owlcarousel/owl-carousel/owl.theme.css">
+    app-box {
+      height: 440px;
+    }
+
+    .second {
+      --app-box-background-front-layer: {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6)), url(images/destiny-banner-lighthouse.jpg);
+        background-position: bottom;
+        padding-bottom: 120px;
+        margin-top: -20px;
+        height: 100%;
+      };
+    }
+
+    .third {
+      --app-box-background-front-layer: {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6)), url(images/destiny-banner-moon-whole.jpg);
+        background-position: bottom;
+        padding-bottom: 120px;
+        margin-top: -20px;
+        height: 100%;
+      };
+    }
+
+    .fourth {
+      --app-box-background-front-layer: {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6)), url(images/destiny-banner-venus-whole.jpg);
+        background-position: bottom;
+        padding-bottom: 120px;
+        margin-top: -20px;
+        height: 100%;
+      };
+    }
+
+    .header-image {
+      height: 440px;
+    }
+
+    article {
+      font-weight: 100;
+      max-width: 1000px;
+      text-align: center;
+      margin: 100px auto;
+    }
+
+    article h2 {
+      font-weight: 100;
+      font-size: 50px;
+      margin: 5px;
+    }
+
+    article p {
+      font-size: 18px;
+      line-height: 30px;
+    }
+
+    article hr {
+      width: 100px;
+      height: 1px;
+      border: none;
+      margin: 20px auto;
+      background-color: black;
+    }
+
+    #memorable-moments .item {
+      margin: 3px;
+      padding: 16px;
+    }
+
+    #memorable-moments .item google-youtube {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+  </style>
 </head>
-<!-- TODO(john-mikhail): Need to break up the page chrome into a template and
-                         reuse so that we don't copy all this stuff on
-                         other pages.  Using this approach and not iron-pages
-                         so that we can have the ability to link or directly
-                         navigate to a page.  Look to see if possible with
-                         iron-pages or even if possible with manipulating
-                         browser history -->
-<body>
-  <paper-header-panel mode="cover">
-    <div class="paper-header home tall"></div>
-    <!-- Content of the entire site.  Uses the cover mode so the page will
-         flow down the middle with the header being static -->
-    <div class="content cover">
-      <paper-tabs selected="0" noink>
-        <paper-tab link tabindex="-1"><a href="/index.html">Home</a></paper-tab>
-        <paper-tab link tabindex="-1"><a href="/featured.html">Featured Members</a></paper-tab>
-        <paper-tab link tabindex="-1"><a href="/stats.html">Clan Stats</a></paper-tab>
-      </paper-tabs>
 
-      <paper-card class="motd">
-        <div class="card-content">
-          We're going through a makeover right now.  Please be patient with us while we
-          work to make the gdestiny.com website a more dynamic community hub.
-        </div>
-      </paper-card>
+<!-- Introduction -->
+<body class="fullbleed" unresolved>
+  <section>
+    <article>
+      <hr />
+      <h2>Welcome Guardians</h2>
+      <p>
+        Welcome to the revamped gDestiny clan site.  Let us tell you a little about our clan...
+      </p>
+      <p>
+        We are a company clan of very dedicated Destiny players who love to play, grind for the perfect
+        god roll weapon, and number crunch perks.  We're a clan that spans both the Xbox and
+        Playstation platforms, with active members in both.  If PvE is your cup of team, we
+        love to raid.  If PvP is your thing, then lets shoot for the lighthouse together.
+      </p>
+      <p>
+        If you're a prospective Guardian interested in joining, then join the clan, join us on Slack for group
+        chats (Destiny, Overwatch and video games in general), and see you at The Tower.
+      </p>
+    </article>
+    <app-box effects="parallax-background">
+      <img background src="images/destiny-banner-traveler2.jpg" class="header-image" />
+    </app-box>
+  </section>
 
-      <paper-card heading="Welcome Guardian!">
-        <div class="card-content">
-          <p>
-            Welcome to the revamped gDestiny clan site.  Let us tell you a little about our clan...
-          </p>
-          <p>
-            We are a company clan of very dedicated Destiny players who love to play, grind for the perfect
-            god roll weapon, and number crunch perks.  We're a clan that spans both the Xbox and
-            Playstation platforms, with active members in both.  If PvE is your cup of team, we
-            love to raid.  If PvP is your thing, then lets shoot for the lighthouse together.
-          </p>
-          <p>
-            If you're a prospective Guardian interested in joining, then join the clan, join us on Slack for group
-            chats (Destiny, Overwatch and video games in general), and see you at The Tower.
-          </p>
-        </div>
+  <!-- Memorable moments video carosel -->
+  <!-- TODO(john-mikhail): Turn this into an element -->
+  <section>
+    <article>
+      <hr />
+      <h2>Memorable Moments</h2>
+      <div id="memorable-moments">
+        <div class="item"><google-youtube video-id="qq_JSnisPi8" chromeless="true" controls="1"></google-youtube></div>
+        <div class="item"><google-youtube video-id="cxp3FxKr3s8" chromeless="true" controls="1"></google-youtube></div>
+        <div class="item"><google-youtube video-id="aYKAg4WY1BU" chromeless="true" controls="1"></google-youtube></div>
+        <div class="item"><google-youtube video-id="jrQzNgzXv5Y" chromeless="true" controls="1"></google-youtube></div>
+        <div class="item"><google-youtube video-id="z1T3UyVoeho" chromeless="true" controls="1"></google-youtube></div>
+        <div class="item"><google-youtube video-id="eailFGjAPRs" chromeless="true" controls="1"></google-youtube></div>
+        <div class="item"><google-youtube video-id="oR5YXJdrnOk" chromeless="true" controls="1"></google-youtube></div>
+      </div>
+    </article>
+    <app-box class="second" effects="parallax-background"></app-box>
+  </section>
 
-        <div class="card-actions">
-          <a href="https://www.bungie.net/en/Clan/Forum/119204" target="_blank">
-            <paper-button>Join the clan</paper-button>
-          </a>
-          <a href="https://www.the100.io/groups/1413" target="_blank">
-            <paper-button>Schedule an Event</paper-button>
-          </a>
-          <a href="https://plus.google.com/communities/109300757687205207528" target="_blank">
-            <paper-button>G+ Community</paper-button>
-          </a>
-        </div>
-      </paper-card>
+  <!-- The featured guardian of the week/month -->
+  <!-- TODO(john-mikhail): Turn this into an element -->
+  <section>
+    <article>
+      <hr />
+      <h2>Featured Guardian</h2>
+      <p>
+        Soon you'll be able to see more detail on the featured guardian
+        as well as a list of previously featured guardians.
+      </p>
+    </article>
+    <app-box class="third" effects="parallax-background"></app-box>
+  </section>
 
-      <!-- Featured guardian card -->
-      <!-- TODO(john-mikhail): Turn this into a featured guardian element -->
-      <paper-card class="fg">
-        <div class="fg-content">
-          <div class="card-content">
-            <div class="fg-header">Featured Guardian</div>
-            <div class="fg-detail-container">
-              <div class="fg-name">
-                fathert0m
-              </div>
-              <div class="fg-detail">
-                // exo // hunter // lvl 40
-              </div>
-            </div>
-          </div>
-          <div class="card-actions">
-            <!-- <a href="/featured-details.html?fg=fathert0m"> -->
-              <paper-button>Details</paper-button>
-            <!-- </a> -->
-          </div>
-        </div>
-        <div class="fg-image"></div>
-      </paper-card>
+  <!-- Clan statistics -->
+  <!-- TODO(john-mikhail): Turn this into an element -->
+  <section>
+    <article>
+      <hr />
+      <h2>Statistics</h2>
+      <p>
+        Want to compare yourself to your fellow Guaraidns?  Well you've come to the right place.  Select a stat to
+        get a more comprehensive view and see where you stack rank.
+      </p>
+      <zero-stats></zero-stats>
+    </article>
+    <app-box class="fourth" effects="parallax-background"></app-box>
+  </section>
 
-      <!-- Youtube highlights -->
-      <paper-card heading="Memorable Moments">
-        <div class="card-content">
-          <div id="memorable-moments">
-            <div class="item"><google-youtube video-id="qq_JSnisPi8" chromeless="true" controls="1"></google-youtube></div>
-            <div class="item"><google-youtube video-id="cxp3FxKr3s8" chromeless="true" controls="1"></google-youtube></div>
-            <div class="item"><google-youtube video-id="aYKAg4WY1BU" chromeless="true" controls="1"></google-youtube></div>
-            <div class="item"><google-youtube video-id="jrQzNgzXv5Y" chromeless="true" controls="1"></google-youtube></div>
-            <div class="item"><google-youtube video-id="z1T3UyVoeho" chromeless="true" controls="1"></google-youtube></div>
-            <div class="item"><google-youtube video-id="eailFGjAPRs" chromeless="true" controls="1"></google-youtube></div>
-            <div class="item"><google-youtube video-id="oR5YXJdrnOk" chromeless="true" controls="1"></google-youtube></div>
-          </div>
-        </div>
-      </paper-card>
-    </div>
-    <gdestiny-footer></gdestiny-footer>
-  </paper-header-panel>
+  <!-- Finally the page footer -->
+  <zero-footer></zero-footer>
+
+  <!-- Initialize the owl carousel framework -->
+  <!-- TODO(john-mikhail): Move this into the memorable moments element -->
   <script>
     $(document).ready(function() {
       $("#memorable-moments").owlCarousel({
@@ -132,7 +199,6 @@
       });
     });
   </script>
-
-  <gdestiny-analytics key="UA-81409202-1"></gdestiny-analytics>
+  <zero-analytics key="UA-81409202-1"></zero-analytics>
 </body>
 </html>
