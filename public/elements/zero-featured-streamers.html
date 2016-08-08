@@ -1,0 +1,66 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="zero-featured-streamer.html">
+
+<dom-module id="zero-featured-streamers">
+  <template>
+    <style include="app-grid-style">
+      :host {
+        display: block;
+        --app-grid-columns: 2;
+        --app-grid-gutter: 10px;
+        /* Height is 100% the width of the item. This is equivalent to 1:1 aspect ratio */
+        --app-grid-item-height: 25%;
+      }
+
+      paper-dialog-scrollable {
+        @apply(--layout-flex);
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 18px;
+        line-height: 30px;
+        font-weight: 400;
+        margin: 10px 20px;
+        vertical-align: middle;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .item {
+        background-color: white;
+      }
+    </style>
+
+    <p>
+      Sit back, grab a drink, and follow the antics of some of our <a href="twitch.tv">Twitch</a>
+      streamers.
+    </p>
+    <ul class="app-grid" has-aspect-ratio>
+      <li><div class="item"><zero-featured-streamer streamer="xx_new_guy_xx"></zero-featured-streamer></div></li>
+      <li><div class="item"><zero-featured-streamer streamer="vengephil"></zero-featured-streamer></div></li>
+    </ul>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'zero-featured-streamers',
+
+      attached: function() {
+        this._updateGridStyles = this._updateGridStyles || function() {
+          this.updateStyles();
+        }.bind(this);
+        window.addEventListener('resize', this._updateGridStyles);
+      },
+
+      detached: function() {
+        window.removeEventListener('resize', this._updateGridStyles);
+      },
+    });
+  </script>
+</dom-module>

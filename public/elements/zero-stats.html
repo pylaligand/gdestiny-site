@@ -1,5 +1,8 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../components/neon-animation/animations/fade-out-animation.html">
 
 <dom-module id="zero-stats">
   <template>
@@ -10,6 +13,10 @@
         --app-grid-gutter: 10px;
         /* Height is 100% the width of the item. This is equivalent to 1:1 aspect ratio */
         --app-grid-item-height: 25%;
+      }
+
+      paper-dialog-scrollable {
+        @apply(--layout-flex);
       }
 
       h1 {
@@ -30,17 +37,28 @@
       .item {
         background-color: white;
       }
+
+      #stats-dialog {
+        min-height: auto;
+        min-width: 50%;
+      }
     </style>
 
+    <p>
+      Want to compare yourself to your fellow Guardians?  Well you've come to the right place.  Select a stat to
+      get a more comprehensive view and see where you stack rank.
+    </p>
+
     <ul class="app-grid" has-aspect-ratio>
-      <li>
-        <div class="item">Grimoire</div>
-      </li>
-      <li>
-        <div class="item">Moments of Triumph</div>
-      </li>
+      <li><div class="item" stats-type="grimoire">Grimoire</div></li>
+      <li><div class="item" stats-type="mot">Moments of Triumph</div></li>
     </ul>
 
+    <paper-dialog id="stats-dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      <paper-dialog-scrollable>
+        <div id="stats-dialog-content"></div>
+      </paper-dialog-scrollable>
+    </paper-dialog>
   </template>
   <script>
     HTMLImports.whenReady(function() {
@@ -52,11 +70,41 @@
             this.updateStyles();
           }.bind(this);
           window.addEventListener('resize', this._updateGridStyles);
+
+          this._setClickHandlers();
         },
 
         detached: function() {
           window.removeEventListener('resize', this._updateGridStyles);
-        }
+        },
+
+        _setClickHandlers: function() {
+          var stats = document.querySelectorAll('.item');
+          if (stats) {
+            for (var i = 0; i < stats.length; i++) {
+              stats[i].addEventListener('click', function(statEl) {
+                  console.log(statEl.getAttribute('stats-type'));
+                  this._openStatsDialog(statEl.getAttribute('stats-type'));
+              }.bind(this, stats[i]));
+            }
+          }
+        },
+
+        _openStatsDialog: function(statsType) {
+          if (statsType == 'grimoire') {
+            $.getScript("../js/stats.js", function() {
+              renderGrimoire();
+              var dialog = document.getElementById('stats-dialog');
+              dialog.open();
+            });
+          } else if (statsType == 'mot') {
+            $.getScript("../js/stats.js", function() {
+              renderMoT();
+              var dialog = document.getElementById('stats-dialog');
+              dialog.open();
+            });
+          }
+        },
       });
     });
   </script>

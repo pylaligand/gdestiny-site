@@ -1,10 +1,17 @@
-$.getScript("https://www.gstatic.com/charts/loader.js", function(){
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(renderGrimoire);
-  google.charts.setOnLoadCallback(renderMoT);
-});
-
 function renderGrimoire() {
+  if (window.zero_loader_loaded) {
+    _renderGrimoireInternal();
+    return;
+  }
+
+  $.getScript("https://www.gstatic.com/charts/loader.js", function(){
+    window.zero_loader_loaded = true;
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(_renderGrimoireInternal);
+  });
+}
+
+function _renderGrimoireInternal() {
   $.getJSON('https://gdestiny-server.herokuapp.com/grimoire', function(json) {
     var rows = [
       ["Gamertag", "Grimoire", { role: "style" }]
@@ -23,22 +30,31 @@ function renderGrimoire() {
    var chartHeight = chartAreaHeight + 80;
 
    var options = {
-     chartArea: {
-       height: chartAreaHeight
-     },
-     height: chartHeight,
      hAxis: {format: 'decimal'},
      legend: { position: "none" }
    };
 
    var chart = new google.visualization.BarChart(
-     document.getElementById('grimoire-chart'));
+     document.getElementById('stats-dialog-content'));
    chart.draw(view, options);
   });
 }
 
+
 // TODO(john-mikhail): Implement
 function renderMoT() {
+  if (window.zero_loader_loaded) {
+    _renderMoTInternal();
+    return;
+  }
+  $.getScript("https://www.gstatic.com/charts/loader.js", function(){
+    window.zero_loader_loaded = true;
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(_renderMoTInternal);
+  });
+}
+
+function _renderMoTInternal() {
   $.getJSON('data/mot.json', function(json) {
   });
 }

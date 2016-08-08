@@ -1,0 +1,48 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="stylesheet" href="/components/owlcarousel/owl-carousel/owl.carousel.css">
+<link rel="stylesheet" href="/components/owlcarousel/owl-carousel/owl.theme.css">
+
+<dom-module id="zero-memorable-moments">
+  <template>
+    <style>
+      #memorable-moments .item {
+        margin: 3px;
+        padding: 16px;
+      }
+
+      #memorable-moments .item google-youtube {
+        display: block;
+        height: auto;
+        width: 100%;
+      }
+    </style>
+    <p>
+      Watch some highlights of our clanmates in action
+    </p>
+    <div id="memorable-moments">
+      <div class="item"><google-youtube video-id="qq_JSnisPi8" chromeless="true" controls="1"></google-youtube></div>
+      <div class="item"><google-youtube video-id="cxp3FxKr3s8" chromeless="true" controls="1"></google-youtube></div>
+      <div class="item"><google-youtube video-id="aYKAg4WY1BU" chromeless="true" controls="1"></google-youtube></div>
+      <div class="item"><google-youtube video-id="jrQzNgzXv5Y" chromeless="true" controls="1"></google-youtube></div>
+      <div class="item"><google-youtube video-id="z1T3UyVoeho" chromeless="true" controls="1"></google-youtube></div>
+      <div class="item"><google-youtube video-id="eailFGjAPRs" chromeless="true" controls="1"></google-youtube></div>
+      <div class="item"><google-youtube video-id="oR5YXJdrnOk" chromeless="true" controls="1"></google-youtube></div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'zero-memorable-moments',
+
+      // This depends on the owl JS library being sourced in index.html.
+      attached: function() {
+        $(document).ready(function() {
+          $("#memorable-moments").owlCarousel({
+            items : 2,
+            itemsDesktop : [1199,2],
+            itemsDesktopSmall : [799,1]
+          });
+        });
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,35 @@
+<script>
+  document.registerElement('zero-rotating-banners', {
+   prototype: {
+     __proto__: HTMLElement.prototype,
+     attachedCallback: function() {
+       var setBackground = function(bannerImages, selectors) {
+         for (var i = 0; i < selectors.length; i++) {
+           var imgSrc = bannerImages[Math.floor(Math.random() * bannerImages.length)];
+           bannerImages.splice($.inArray(imgSrc, bannerImages), 1);
+           var box = document.querySelector('.' + selectors[i] + ' #backgroundFrontLayer.app-box');
+           $(box).css('background-image', 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url(' + imgSrc + ')');
+         }
+       };
+
+       var bannerImages = [
+         'images/destiny-banner-banner-fall.jpg',
+         'images/destiny-banner-dreadnaught.jpg',
+         'images/destiny-banner-earth-whole.jpg',
+         'images/destiny-banner-earth.jpg',
+         'images/destiny-banner-lighthouse.jpg',
+         'images/destiny-banner-mars-whole.jpg',
+         'images/destiny-banner-mars.jpg',
+         'images/destiny-banner-moon-whole.jpg',
+         'images/destiny-banner-moon.jpg',
+         'images/destiny-banner-reef.jpg',
+         'images/destiny-banner-reef2.jpg',
+         'images/destiny-banner-twilight-gap.jpg',
+         'images/destiny-banner-venus-whole.jpg',
+         'images/destiny-banner-venus.jpg'
+       ]
+       setBackground(bannerImages, this.getAttribute('selectors').split(','));
+     }
+   }
+ });
+</script>
