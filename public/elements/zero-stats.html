@@ -34,7 +34,7 @@
         list-style: none;
       }
 
-      .item {
+      .stats-item {
         background-color: white;
       }
 
@@ -50,8 +50,8 @@
     </p>
 
     <ul class="app-grid" has-aspect-ratio>
-      <li><div class="item" stats-type="grimoire">Grimoire</div></li>
-      <li><div class="item" stats-type="mot">Moments of Triumph</div></li>
+      <li><div class="stats-item" stats-type="grimoire">Grimoire</div></li>
+      <li><div class="stats-item" stats-type="mot">Moments of Triumph</div></li>
     </ul>
 
     <paper-dialog id="stats-dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
@@ -79,7 +79,7 @@
         },
 
         _setClickHandlers: function() {
-          var stats = document.querySelectorAll('.item');
+          var stats = document.querySelectorAll('.stats-item');
           if (stats) {
             for (var i = 0; i < stats.length; i++) {
               stats[i].addEventListener('click', function(statEl) {

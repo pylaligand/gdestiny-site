@@ -1,14 +1,167 @@
 <link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../components/paper-badge/paper-badge.html">
+<link rel="import" href="../components/paper-card/paper-card.html">
+<link rel="import" href="../components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../components/paper-styles/color.html">
+<link rel="import" href="../components/paper-styles/typography.html">
 
 <dom-module id="zero-featured-streamer">
   <template>
+    <style>
+      paper-card.streamer {
+        @apply(--layout-horizontal);
+      }
 
+      .icon {
+        width: auto;
+        height: 200px;
+      }
+
+      .icon-wrapper {
+        width: 200px;
+      }
+
+      .streamer-content {
+        @apply(--layout-flex);
+        float: left;
+      }
+
+      .name {
+        margin: 10px 0;
+      }
+
+      .streamer-detail {
+        display: none;
+      }
+
+      .streamer-detail.live {
+        display: block;
+      }
+
+      paper-icon-button.rate-icon {
+        --iron-icon-fill-color: white;
+        --iron-icon-stroke-color: var(--paper-grey-600);
+      }
+    </style>
+
+    <paper-card id="{{streamer}}" class="streamer">
+      <div class="streamer-content">
+        <div class="card-content">
+          <div class="name">{{streamer}}</div>
+          <div class="streamer-detail">
+            <div class="stream-title">this can be a long stream title // foo</div>
+            <div class="number-of-views">#views</div>
+            <div class="number-of-subs">#subs</div>
+          </div>
+        </div>
+      </div>
+      <div class="icon-wrapper">
+        <div id="icon" class="icon"></div>
+      </div>
+
+      <paper-badge id="status" for="icon"></paper-badge>
+    </paper-card>
+
+    <paper-dialog id="{{streamer}}-stream-dialog"
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation"
+                  on-iron-overlay-closed="_closeDialog"
+                  with-backdrop>
+      <paper-dialog-scrollable>
+        <div id="{{streamer}}-streaming-div"></div>
+      </paper-dialog-scrollable>
+    </paper-dialog>
   </template>
+
   <script>
     Polymer({
       is: 'zero-featured-streamer',
+      properties: {
+        streamer: String,
+        loaded: Boolean,
+        player: Object
+      },
 
-      attachedCallback: function() {
+      attached: function() {
+        $.getJSON('https://api.twitch.tv/kraken/users/' + this.streamer,
+            this._handleStreamerInfoReceived.bind(this));
+      },
+
+      _handleStreamerInfoReceived: function(json) {
+        if (!json) {
+          return;
+        }
+
+        var iconDom = Polymer.dom(this.root).querySelector('#icon');
+        $(iconDom).css('background', 'url(' + json.logo + ') no-repeat');
+        $(iconDom).css('background-size', 'contain');
+
+        $.getJSON('https://api.twitch.tv/kraken/streams/' + this.streamer,
+            this._handleStreamReceived.bind(this));
+
+      },
+
+      _handleStreamReceived: function(json) {
+        if (!json) {
+          return;
+        }
+
+        var statusColor = '#D50000';
+        if (json.stream) {
+          statusColor = '#00C853';
+          this._setStreamerLive(json.stream);
+        }
+
+        var badgeDom = Polymer.dom(this.root).querySelector('#status');
+        $(badgeDom).children().css('background-color', statusColor);
+      },
+
+      _setStreamerLive: function(streamJson) {
+        this._setClickHandlers();
+        var streamerDetail = Polymer.dom(this.root).querySelector('.streamer-detail');
+        $(streamerDetail).addClass('live');
+        var title = streamerDetail.children[0];
+        title.innerHTML = streamJson.channel.status;
+        var numViews = streamerDetail.children[1];
+        numViews.innerHTML = 'Total Views:' + streamJson.channel.views;
+        var numFollowers = streamerDetail.children[2];
+        numFollowers.innerHTML = 'Followers: ' + streamJson.channel.followers;
+      },
+
+      _setClickHandlers: function() {
+        var streamerCard = Polymer.dom(this.root).querySelector('#' + this.streamer);
+        if (streamerCard) {
+          console.log('Setting click handler for streamer: ' + this.streamer);
+          streamerCard.addEventListener('click', function() {
+              this._openStreamDialog();
+          }.bind(this));
+        }
+      },
+
+      _openStreamDialog: function() {
+        if (!this.loaded) {
+          var options = {
+              width: 854,
+              height: 480,
+              channel: this.streamer,
+          };
+          console.log('Opening dialog for streamer: ' + this.streamer);
+          this.player = new Twitch.Player(this.streamer + '-streaming-div', options);
+        }
+        var dialog = document.getElementById(this.streamer + '-stream-dialog');
+        dialog.open();
+        this.loaded = true;
+      },
+
+      _closeDialog: function() {
+        if (this.player) {
+          this.player.pause();
+        }
       }
     });
   </script>

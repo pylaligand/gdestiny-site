@@ -8,9 +8,9 @@
       :host {
         display: block;
         --app-grid-columns: 2;
-        --app-grid-gutter: 10px;
+        --app-grid-gutter: 20px;
         /* Height is 100% the width of the item. This is equivalent to 1:1 aspect ratio */
-        --app-grid-item-height: 25%;
+        --app-grid-item-height: 200px;
       }
 
       paper-dialog-scrollable {
@@ -32,7 +32,7 @@
         list-style: none;
       }
 
-      .item {
+      .streamer-item {
         background-color: white;
       }
     </style>
@@ -42,8 +42,8 @@
       streamers.
     </p>
     <ul class="app-grid" has-aspect-ratio>
-      <li><div class="item"><zero-featured-streamer streamer="xx_new_guy_xx"></zero-featured-streamer></div></li>
-      <li><div class="item"><zero-featured-streamer streamer="vengephil"></zero-featured-streamer></div></li>
+      <li><div class="streamer-item"><zero-featured-streamer streamer="xx_new_guy_xx"></zero-featured-streamer></div></li>
+      <li><div class="streamer-item"><zero-featured-streamer streamer="vengephil"></zero-featured-streamer></div></li>
     </ul>
 
   </template>
