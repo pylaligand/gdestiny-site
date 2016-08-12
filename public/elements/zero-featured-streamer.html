@@ -13,39 +13,50 @@
 <dom-module id="zero-featured-streamer">
   <template>
     <style>
-      paper-card.streamer {
+      .streamer {
         @apply(--layout-horizontal);
       }
 
-      .icon {
-        width: auto;
-        height: 200px;
-      }
-
-      .icon-wrapper {
-        width: 200px;
+      .streamer.live {
+        cursor: pointer;
       }
 
       .streamer-content {
         @apply(--layout-flex);
-        float: left;
-      }
-
-      .name {
-        margin: 10px 0;
       }
 
       .streamer-detail {
         display: none;
+        font-size: 14px;
       }
 
       .streamer-detail.live {
         display: block;
       }
 
-      paper-icon-button.rate-icon {
-        --iron-icon-fill-color: white;
-        --iron-icon-stroke-color: var(--paper-grey-600);
+      .icon {
+        height: 200px;
+        width: auto;
+      }
+
+      .icon-wrapper {
+        width: 200px;
+      }
+
+      .name {
+        margin: 10px 0;
+      }
+
+      .card-content {
+        padding: 0;
+      }
+
+      .card-content > hr {
+        background-color: #e4e4e4;
+        border: none;
+        height: 1px;
+        margin: 20px auto;
+        width: 100px;
       }
     </style>
 
@@ -53,10 +64,11 @@
       <div class="streamer-content">
         <div class="card-content">
           <div class="name">{{streamer}}</div>
+          <hr >
           <div class="streamer-detail">
-            <div class="stream-title">this can be a long stream title // foo</div>
-            <div class="number-of-views">#views</div>
-            <div class="number-of-subs">#subs</div>
+            <div><b>Playing:</b> </div>
+            <div><b>Total Views:</b> </div>
+            <div><b>Followers:</b> </div>
           </div>
         </div>
       </div>
@@ -72,9 +84,7 @@
                   exit-animation="fade-out-animation"
                   on-iron-overlay-closed="_closeDialog"
                   with-backdrop>
-      <paper-dialog-scrollable>
-        <div id="{{streamer}}-streaming-div"></div>
-      </paper-dialog-scrollable>
+      <div id="{{streamer}}-streaming-div"></div>
     </paper-dialog>
   </template>
 
@@ -83,11 +93,17 @@
       is: 'zero-featured-streamer',
       properties: {
         streamer: String,
-        loaded: Boolean,
-        player: Object
+        _loaded: Boolean,
+        _twitchPlayer: Object,
+        _root: {
+          type: Object,
+          value: function() {
+            return Polymer.dom(this.root);
+          }
+        }
       },
 
-      attached: function() {
+      ready: function() {
         $.getJSON('https://api.twitch.tv/kraken/users/' + this.streamer,
             this._handleStreamerInfoReceived.bind(this));
       },
@@ -97,10 +113,11 @@
           return;
         }
 
-        var iconDom = Polymer.dom(this.root).querySelector('#icon');
-        $(iconDom).css('background', 'url(' + json.logo + ') no-repeat');
-        $(iconDom).css('background-size', 'contain');
+        this._setStreamerIcon(json.logo);
 
+        // We have the streamer information, now get the stream information
+        // which should tell us if there is an active stream (i.e. a channel) or
+        // if they are offline.
         $.getJSON('https://api.twitch.tv/kraken/streams/' + this.streamer,
             this._handleStreamReceived.bind(this));
 
@@ -111,32 +128,46 @@
           return;
         }
 
-        var statusColor = '#D50000';
+        var statusColor = '#D50000';  // Red - Offline
         if (json.stream) {
-          statusColor = '#00C853';
-          this._setStreamerLive(json.stream);
+          statusColor = '#00C853';  // Green - Online
+          this._setStreamerStatusLive(json.stream);
         }
 
-        var badgeDom = Polymer.dom(this.root).querySelector('#status');
+        var badgeDom = this._root.querySelector('#status');
         $(badgeDom).children().css('background-color', statusColor);
       },
 
-      _setStreamerLive: function(streamJson) {
+      _setStreamerIcon: function(logo) {
+        var iconDom = this._root.querySelector('#icon');
+        $(iconDom).css('background', 'url(' + logo + ') no-repeat');
+        $(iconDom).css('background-size', 'contain');
+      },
+
+      _setStreamerStatusLive: function(stream) {
+        var streamChannel = stream.channel;
+
+        // Set the click handler so we can click on the streamer card and
+        // show the video dialog.
         this._setClickHandlers();
-        var streamerDetail = Polymer.dom(this.root).querySelector('.streamer-detail');
-        $(streamerDetail).addClass('live');
-        var title = streamerDetail.children[0];
-        title.innerHTML = streamJson.channel.status;
-        var numViews = streamerDetail.children[1];
-        numViews.innerHTML = 'Total Views:' + streamJson.channel.views;
-        var numFollowers = streamerDetail.children[2];
-        numFollowers.innerHTML = 'Followers: ' + streamJson.channel.followers;
+
+        // Modifies the cursor to a pointer
+        var streamerDom = this._root.querySelector('#' + this.streamer);
+        $(streamerDom).addClass('live');
+
+        // Set the detail visible
+        var detailDom = streamerDom.querySelector('.streamer-detail');
+        $(detailDom).addClass('live');
+
+        // Set the gama name, # views and # followers
+        detailDom.children[0].innerHTML += stream.game;
+        detailDom.children[1].innerHTML += streamChannel.views.toLocaleString();
+        detailDom.children[2].innerHTML += streamChannel.followers.toLocaleString();
       },
 
       _setClickHandlers: function() {
-        var streamerCard = Polymer.dom(this.root).querySelector('#' + this.streamer);
+        var streamerCard = this._root.querySelector('#' + this.streamer);
         if (streamerCard) {
-          console.log('Setting click handler for streamer: ' + this.streamer);
           streamerCard.addEventListener('click', function() {
               this._openStreamDialog();
           }.bind(this));
@@ -144,23 +175,22 @@
       },
 
       _openStreamDialog: function() {
-        if (!this.loaded) {
+        if (!this._loaded) {
           var options = {
               width: 854,
               height: 480,
               channel: this.streamer,
           };
-          console.log('Opening dialog for streamer: ' + this.streamer);
-          this.player = new Twitch.Player(this.streamer + '-streaming-div', options);
+          this._twitchPlayer =
+              new Twitch.Player(this.streamer + '-streaming-div', options);
         }
-        var dialog = document.getElementById(this.streamer + '-stream-dialog');
-        dialog.open();
-        this.loaded = true;
+        (document.getElementById(this.streamer + '-stream-dialog')).open();
+        this._loaded = true;
       },
 
       _closeDialog: function() {
-        if (this.player) {
-          this.player.pause();
+        if (this._twitchPlayer) {
+          this._twitchPlayer.pause();
         }
       }
     });

@@ -34,13 +34,11 @@
       is: 'zero-memorable-moments',
 
       // This depends on the owl JS library being sourced in index.html.
-      attached: function() {
-        $(document).ready(function() {
-          $("#memorable-moments").owlCarousel({
-            items : 2,
-            itemsDesktop : [1199,2],
-            itemsDesktopSmall : [799,1]
-          });
+      ready: function() {
+        $("#memorable-moments").owlCarousel({
+          items : 2,
+          itemsDesktop : [1199,2],
+          itemsDesktopSmall : [799,1]
         });
       }
     });
