@@ -1,0 +1,221 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/google-chart/google-chart.html">
+<link rel="import" href="../components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../components/neon-animation/animations/fade-out-animation.html">
+
+<dom-module id="zero-stat">
+  <template>
+    <style>
+    .stat {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    .stat img {
+      height: 96px;
+      width: 96px;
+    }
+
+    .stat h2 {
+      font-weight: 200;
+      margin-bottom: 0;
+      width: 100%;
+    }
+
+    paper-dialog-scrollable {
+      @apply(--layout-flex);
+    }
+
+    .dialog {
+      width: 75%;
+      height: auto;
+    }
+
+    .dialog .title {
+      font-size: 20px;
+      font-weight: 300;
+    }
+    </style>
+    <paper-card id="{{type}}" class="stat">
+      <div class="card-content">
+        <h2>{{title}}</h2>
+        <img src="/images/icon_{{type}}.svg" />
+      </div>
+    </paper-card>
+    <paper-dialog id="{{type}}-dialog"
+                  class="dialog"
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation"
+                  on-iron-overlay-closed="_closeDialog"
+                  with-backdrop
+                  modal>
+        <h1 class="title">{{title}}</h1>
+        <paper-dialog-scrollable>
+          <google-chart type="bar"
+                        options="[[_chartOptions]]"
+                        cols="[[_chartCols)]]"
+                        data="[[_chartData]]">
+          </google-chart>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Close</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'zero-stat',
+      properties: {
+        type: String,
+        title: String,
+        _chartOptions: Array,
+        _chartCols: Array,
+        _chartData: Array,
+        _root: {
+          type: Object,
+          value: function() {
+            return Polymer.dom(this.root);
+          }
+        }
+      },
+
+      ready: function() {
+        this._setClickHandlers();
+      },
+
+      _getChartOptions: function(length) {
+        var height = (length * 25);
+        return {
+          chartArea: {
+            left: '33%',
+            height: height,
+            viewWindowMode: 'maximized',
+            width: '90%'
+          },
+          hAxis: {
+            textPosition: 'none'
+          },
+          legend: {
+            position: 'none'
+          },
+          width: 900,
+          height: height
+        };
+      },
+
+      _getChartCols: function(xAxisLabel, yAxisLabel) {
+        return [
+          {
+            label: xAxisLabel,
+            type: 'string'
+          },
+          {
+            label: yAxisLabel,
+            type: 'number'
+          }
+        ];
+      },
+
+      _getCMoThartCols: function(xAxisLabel, yAxisLabel) {
+        return [
+          {
+            label: xAxisLabel,
+            type: 'string'
+          },
+          {
+            label: yAxisLabel,
+            type: 'string'
+          }
+        ];
+      },
+
+      // TODO(john-mikhail): A lot of refactoring is needed to make this
+      // a generalize element.  Revisit.
+      _loadGrimoireChartData: function() {
+        $.getJSON('https://gdestiny-server.herokuapp.com/grimoire', function(json) {
+          this._chartCols = this._getChartCols('Guardian', 'Grimoire');
+          this._chartOptions = this._getChartOptions(json.data.length);
+          var rows = [[
+            'Guardian',
+            'Grimoire',
+            { role: 'style' },
+            { role: 'annotation' }
+          ]];
+          $.each(json.data, function(index, value) {
+            var color = value.platform == "xb" ? "#64DD17" : "#3366CC";
+            rows.push([
+                value.name,
+                value.grimoire,
+                color,
+                value.grimoire.toLocaleString()
+            ]);
+          });
+          this._chartData = rows;
+        }.bind(this));
+      },
+
+      _loadMoTChartData: function() {
+        $.getJSON('https://gdestiny-server.herokuapp.com/triumphs', function(json) {
+          this._chartCols = this._getCMoThartCols('Guardian', 'Progress');
+          var rows = [[
+            'Guardian',
+            'Progress',
+            { role: 'annotation' }
+          ]];
+          var numGuardians = 0;
+          for (progress in json) {
+            $.each(json[progress], function(index, value) {
+              numGuardians++;
+              rows.push([value, parseInt(progress, 10), progress + '%']);
+            });
+          }
+          this._chartOptions = this._getChartOptions(numGuardians);
+          this._chartData = rows;
+        }.bind(this));
+      },
+
+      _setClickHandlers: function() {
+        var statsCard = this._root.querySelector('#' + this.type);
+        statsCard.addEventListener('click', function() {
+            this._openStatsDialog();
+        }.bind(this));
+      },
+
+      _openStatsDialog: function() {
+        if (this.type == 'grimoire') {
+          this._loadGrimoireChartData();
+        } else if (this.type == 'mot') {
+          this._loadMoTChartData();
+        }
+        var dialog = document.getElementById(this.type + '-dialog');
+        dialog.open();
+
+        // Stop the page from being able to be srolled in the background.
+        // Revisit and make a site wide helper.
+        this.scrollPosition = [
+          self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+          self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
+        ];
+        var html = jQuery('html');
+        html.data('scroll-position', this.scrollPosition);
+        html.data('previous-overflow', html.css('overflow'));
+        html.css('overflow', 'hidden');
+        window.scrollTo(this.scrollPosition[0], this.scrollPosition[1]);
+
+      },
+
+      _closeDialog: function() {
+        // When we close the dialog, re-enable page scrolling.
+        var html = jQuery('html');
+        var scrollPosition = html.data('scroll-position');
+        html.css('overflow', html.data('previous-overflow'));
+        window.scrollTo(this.scrollPosition[0], this.scrollPosition[1]);
+      }
+    });
+  </script>
+</dom-module>

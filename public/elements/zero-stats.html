@@ -1,8 +1,6 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
-<link rel="import" href="../components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../components/neon-animation/animations/scale-up-animation.html">
-<link rel="import" href="../components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="zero-stat.html">
 
 <dom-module id="zero-stats">
   <template>
@@ -50,62 +48,24 @@
     </p>
 
     <ul class="app-grid" has-aspect-ratio>
-      <li><div class="stats-item" stats-type="grimoire">Grimoire</div></li>
-      <li><div class="stats-item" stats-type="mot">Moments of Triumph</div></li>
+      <li><div class="stats-item"><zero-stat type="grimoire" title="Grimoire"></zero-stat></div></li>
+      <li><div class="stats-item"><zero-stat type="mot" title="Moments of Triumph"></zero-stat></div></li>
     </ul>
-
-    <paper-dialog id="stats-dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-      <paper-dialog-scrollable>
-        <div id="stats-dialog-content"></div>
-      </paper-dialog-scrollable>
-    </paper-dialog>
   </template>
   <script>
-    HTMLImports.whenReady(function() {
-      Polymer({
-        is: 'zero-stats',
+    Polymer({
+      is: 'zero-stats',
 
-        attached: function() {
-          this._updateGridStyles = this._updateGridStyles || function() {
-            this.updateStyles();
-          }.bind(this);
-          window.addEventListener('resize', this._updateGridStyles);
+      attached: function() {
+        this._updateGridStyles = this._updateGridStyles || function() {
+          this.updateStyles();
+        }.bind(this);
+        window.addEventListener('resize', this._updateGridStyles);
+      },
 
-          this._setClickHandlers();
-        },
-
-        detached: function() {
-          window.removeEventListener('resize', this._updateGridStyles);
-        },
-
-        _setClickHandlers: function() {
-          var stats = document.querySelectorAll('.stats-item');
-          if (stats) {
-            for (var i = 0; i < stats.length; i++) {
-              stats[i].addEventListener('click', function(statEl) {
-                  console.log(statEl.getAttribute('stats-type'));
-                  this._openStatsDialog(statEl.getAttribute('stats-type'));
-              }.bind(this, stats[i]));
-            }
-          }
-        },
-
-        _openStatsDialog: function(statsType) {
-          if (statsType == 'grimoire') {
-            $.getScript("../js/stats.js", function() {
-              renderGrimoire();
-              var dialog = document.getElementById('stats-dialog');
-              dialog.open();
-            });
-          } else if (statsType == 'mot') {
-            $.getScript("../js/stats.js", function() {
-              renderMoT();
-              var dialog = document.getElementById('stats-dialog');
-              dialog.open();
-            });
-          }
-        },
-      });
+      detached: function() {
+        window.removeEventListener('resize', this._updateGridStyles);
+      },
     });
   </script>
 </dom-module>
