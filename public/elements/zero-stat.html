@@ -11,6 +11,7 @@
   <template>
     <style>
     .stat {
+      cursor: pointer;
       display: block;
       height: auto;
       width: 100%;
@@ -58,7 +59,6 @@
         <paper-dialog-scrollable>
           <google-chart type="bar"
                         options="[[_chartOptions]]"
-                        cols="[[_chartCols)]]"
                         data="[[_chartData]]">
           </google-chart>
       </paper-dialog-scrollable>
@@ -100,59 +100,40 @@
           hAxis: {
             textPosition: 'none'
           },
-          legend: {
-            position: 'none'
-          },
+          legend: 'none',
           width: 900,
           height: height
         };
-      },
-
-      _getChartCols: function(xAxisLabel, yAxisLabel) {
-        return [
-          {
-            label: xAxisLabel,
-            type: 'string'
-          },
-          {
-            label: yAxisLabel,
-            type: 'number'
-          }
-        ];
-      },
-
-      _getCMoThartCols: function(xAxisLabel, yAxisLabel) {
-        return [
-          {
-            label: xAxisLabel,
-            type: 'string'
-          },
-          {
-            label: yAxisLabel,
-            type: 'string'
-          }
-        ];
       },
 
       // TODO(john-mikhail): A lot of refactoring is needed to make this
       // a generalize element.  Revisit.
       _loadGrimoireChartData: function() {
         $.getJSON('https://gdestiny-server.herokuapp.com/grimoire', function(json) {
-          this._chartCols = this._getChartCols('Guardian', 'Grimoire');
           this._chartOptions = this._getChartOptions(json.data.length);
           var rows = [[
             'Guardian',
             'Grimoire',
             { role: 'style' },
-            { role: 'annotation' }
+            { role: 'annotation' },
+            { role: 'tooltip' },
           ]];
+          var maxGrimoire = json['max-grimoire'];
           $.each(json.data, function(index, value) {
-            var color = value.platform == "xb" ? "#64DD17" : "#3366CC";
+            var platform = value.platform;
+            var grimoireScore = value.grimoire;
+            var grimoirePercentage = value.percentage + '%';
+
+            var color = platform == "xb" ? "#64DD17" : "#3366CC";
+            var tooltip = value.name + ' // ' + grimoireScore + ' of ' +
+                (platform == 'xb' ? maxGrimoire['xb'] : maxGrimoire['ps']) +
+                ' // ' + grimoirePercentage;
             rows.push([
                 value.name,
-                value.grimoire,
+                grimoireScore,
                 color,
-                value.grimoire.toLocaleString()
+                grimoireScore.toLocaleString(),
+                tooltip
             ]);
           });
           this._chartData = rows;
@@ -161,17 +142,24 @@
 
       _loadMoTChartData: function() {
         $.getJSON('https://gdestiny-server.herokuapp.com/triumphs', function(json) {
-          this._chartCols = this._getCMoThartCols('Guardian', 'Progress');
           var rows = [[
             'Guardian',
             'Progress',
-            { role: 'annotation' }
+            { role: 'annotation' },
+            { role: 'tooltip' }
           ]];
           var numGuardians = 0;
           for (progress in json) {
             $.each(json[progress], function(index, value) {
               numGuardians++;
-              rows.push([value, parseInt(progress, 10), progress + '%']);
+              var progressStr = progress + '%';
+              var tooltip = value + ' // ' + progressStr;
+              rows.push([
+                  value,
+                  parseInt(progress, 10),
+                  progressStr,
+                  tooltip
+              ]);
             });
           }
           this._chartOptions = this._getChartOptions(numGuardians);
