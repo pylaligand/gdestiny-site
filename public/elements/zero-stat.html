@@ -10,37 +10,45 @@
 <dom-module id="zero-stat">
   <template>
     <style>
-    .stat {
-      cursor: pointer;
-      display: block;
-      height: auto;
-      width: 100%;
-    }
+      .stat {
+        cursor: pointer;
+        display: block;
+        height: auto;
+        width: 100%;
+      }
 
-    .stat img {
-      height: 96px;
-      width: 96px;
-    }
+      .stat img {
+        height: 96px;
+        width: 96px;
+      }
 
-    .stat h2 {
-      font-weight: 200;
-      margin-bottom: 0;
-      width: 100%;
-    }
+      .stat h2 {
+        font-weight: 200;
+        margin-bottom: 0;
+        width: 100%;
+      }
 
-    paper-dialog-scrollable {
-      @apply(--layout-flex);
-    }
+      .dialog {
+        width: 75%;
+        height: 90%;
+      }
 
-    .dialog {
-      width: 75%;
-      height: auto;
-    }
+      .dialog .title {
+        font-size: 20px;
+        font-weight: 300;
+      }
 
-    .dialog .title {
-      font-size: 20px;
-      font-weight: 300;
-    }
+      paper-dialog-scrollable {
+        height: calc(100% - 120px);
+      }
+
+      paper-dialog paper-dialog-scrollable {
+        --paper-dialog-scrollable: {
+          box-sizing: border-box;
+          height: 100%;
+        }
+      }
+
     </style>
     <paper-card id="{{type}}" class="stat">
       <div class="card-content">
