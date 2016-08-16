@@ -15,9 +15,6 @@
     <style>
       .streamer {
         @apply(--layout-horizontal);
-      }
-
-      .streamer.live {
         cursor: pointer;
       }
 
@@ -120,7 +117,6 @@
         // if they are offline.
         $.getJSON('https://api.twitch.tv/kraken/streams/' + this.streamer,
             this._handleStreamReceived.bind(this));
-
       },
 
       _handleStreamReceived: function(json) {
@@ -132,10 +128,16 @@
         if (json.stream) {
           statusColor = '#00C853';  // Green - Online
           this._setStreamerStatusLive(json.stream);
+        } else {
+          this.isLive = false;
         }
 
         var badgeDom = this._root.querySelector('#status');
         $(badgeDom).children().css('background-color', statusColor);
+
+        // Set the click handler so we can click on the streamer card and
+        // show the video dialog.
+        this._setClickHandlers();
       },
 
       _setStreamerIcon: function(logo) {
@@ -146,17 +148,12 @@
 
       _setStreamerStatusLive: function(stream) {
         var streamChannel = stream.channel;
-
-        // Set the click handler so we can click on the streamer card and
-        // show the video dialog.
-        this._setClickHandlers();
-
-        // Modifies the cursor to a pointer
         var streamerDom = this._root.querySelector('#' + this.streamer);
-        $(streamerDom).addClass('live');
-
-        // Set the detail visible
         var detailDom = streamerDom.querySelector('.streamer-detail');
+
+        this.isLive = true;
+  
+        // Set the detail visible
         $(detailDom).addClass('live');
 
         // Set the gama name, # views and # followers
@@ -168,9 +165,15 @@
       _setClickHandlers: function() {
         var streamerCard = this._root.querySelector('#' + this.streamer);
         if (streamerCard) {
-          streamerCard.addEventListener('click', function() {
+          if (this.isLive) {
+            streamerCard.addEventListener('click', function() {
               this._openStreamDialog();
-          }.bind(this));
+            }.bind(this));
+          } else {
+            streamerCard.addEventListener('click', function() {
+              window.open('https://twitch.tv/' + this.streamer, '_blank');
+            }.bind(this));
+          }
         }
       },
 
