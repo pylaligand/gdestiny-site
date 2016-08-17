@@ -141,8 +141,9 @@
       },
 
       _setStreamerIcon: function(logo) {
+        var logoSrc = logo || '/images/icon_person.svg';
         var iconDom = this._root.querySelector('#icon');
-        $(iconDom).css('background', 'url(' + logo + ') no-repeat');
+        $(iconDom).css('background', 'url(' + logoSrc + ') no-repeat');
         $(iconDom).css('background-size', 'contain');
       },
 
@@ -152,7 +153,7 @@
         var detailDom = streamerDom.querySelector('.streamer-detail');
 
         this.isLive = true;
-  
+
         // Set the detail visible
         $(detailDom).addClass('live');
 
