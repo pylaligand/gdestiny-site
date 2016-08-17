@@ -29,6 +29,14 @@
         width: 20px;
       }
 
+      .footer a.contact img {
+        margin-left: 5px;
+      }
+
+      .footer .donation {
+        margin-top: 10px;
+      }
+
       @media(max-width: 799px) {
         .footer .right {
           float: left;
@@ -48,9 +56,17 @@
         <a href="www.bungie.net" target="_blank">Bungie</a>.
       </div>
       <div class="right">
-        <a href="mailto:cayde@gdestiny.com" target="_blank">
-          Contact us <img src="/images/icon_destiny.png"/>
+        <a class="contact" href="mailto:cayde@gdestiny.com" target="_blank">
+          Contact us<img src="/images/icon_destiny.png"/>
         </a>
+        <div class="donation">
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
+            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+          </form>
+        </div>
       </div>
     </div>
   </template>
