@@ -95,7 +95,6 @@
 
       ready: function() {
         var dataFile = '/data/featured_guardians/' + this.guardian + '.json';
-        console.log(dataFile);
         $.getJSON(dataFile, function(json) {
           this.platform = json.platform;
           this.questions = json.questions;
