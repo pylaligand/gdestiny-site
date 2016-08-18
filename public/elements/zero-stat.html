@@ -152,6 +152,7 @@
           var rows = [[
             'Guardian',
             'Progress',
+            { role: 'style' },
             { role: 'annotation' },
             { role: 'tooltip' }
           ]];
@@ -159,11 +160,13 @@
           for (progress in json) {
             $.each(json[progress], function(index, value) {
               numGuardians++;
+              var color = value.platform == "xb" ? "#64DD17" : "#3366CC";
               var progressStr = progress + '%';
-              var tooltip = value + ' // ' + progressStr;
+              var tooltip = value.name + ' // ' + progressStr;
               rows.push([
-                  value,
+                  value.name,
                   parseInt(progress, 10),
+                  color,
                   progressStr,
                   tooltip
               ]);
