@@ -193,6 +193,8 @@
         var dialog = document.getElementById(this.type + '-dialog');
         dialog.open();
 
+        ga('send', 'event', 'stats', 'view', this.type);
+
         // Stop the page from being able to be srolled in the background.
         // Revisit and make a site wide helper.
         this.scrollPosition = [
@@ -208,6 +210,8 @@
       },
 
       _closeDialog: function() {
+        ga('send', 'event', 'stats', 'close', this.type);
+
         // When we close the dialog, re-enable page scrolling.
         var html = jQuery('html');
         var scrollPosition = html.data('scroll-position');

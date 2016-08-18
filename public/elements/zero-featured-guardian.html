@@ -69,9 +69,9 @@
                 class="white">
       <div class="card-actions">
         <div class="fg-qa">Guardian Q &amp; A</div>
-        <paper-icon-button icon="hardware:keyboard-arrow-up"
-                           title="more info"
-                           onclick="_toggle()"
+        <paper-icon-button id="toggle"
+                           icon="hardware:keyboard-arrow-up"
+                           title="More Info"
                            style="float:right;"></paper-icon-button>
         <iron-collapse id="guardian-qa" style="width:100%;">
           <div class="question">
@@ -192,15 +192,6 @@
           </div>
 
         </iron-collapse>
-        <script>
-          function _toggle() {
-            var moreInfo = document.getElementById('guardian-qa');
-            var iconButton = Polymer.dom(event).localTarget;
-            iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-                                              : 'hardware:keyboard-arrow-down';
-            moreInfo.toggle();
-          }
-        </script>
       </div>
     </paper-card>
   </template>
@@ -210,6 +201,28 @@
       properties: {
         guardian: String,
         platform: String
+      },
+
+      ready: function() {
+        var toggle = Polymer.dom(this.root).querySelector('#toggle');
+        if (!toggle) {
+          return;
+        }
+
+        toggle.addEventListener('click', function() {
+          this._toggle();
+        }.bind(this));
+      },
+
+      _toggle: function() {
+        var moreInfo = document.getElementById('guardian-qa');
+        var iconButton = Polymer.dom(event).localTarget;
+        iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+                                          : 'hardware:keyboard-arrow-down';
+        moreInfo.toggle();
+
+        ga('send', 'event', 'featured_guardian', 'toggle_q&a', this.guardian,
+            moreInfo.opened ? 1 : 0);
       }
     });
   </script>
