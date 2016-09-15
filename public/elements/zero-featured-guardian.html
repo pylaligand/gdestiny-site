@@ -72,7 +72,7 @@
                            icon="hardware:keyboard-arrow-up"
                            title="More Info"
                            style="float:right;"></paper-icon-button>
-        <iron-collapse id="guardian-qa" style="width:100%;">
+        <iron-collapse id="guardian-qa-[[guardian]]" style="width:100%;">
           <template is="dom-repeat" items="[[questions]]" as="question">
             <div class="question">
               <div class="q">{{question.question}}</div>
@@ -121,7 +121,7 @@
       },
 
       _toggle: function() {
-        var moreInfo = document.getElementById('guardian-qa');
+        var moreInfo = document.getElementById('guardian-qa-' + this.guardian);
         var iconButton = Polymer.dom(event).localTarget;
         iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
                                           : 'hardware:keyboard-arrow-down';
