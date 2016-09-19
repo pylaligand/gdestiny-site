@@ -8,9 +8,9 @@
       :host {
         display: block;
         --app-grid-columns: 2;
-        --app-grid-gutter: 10px;
+        --app-grid-gutter: 20px;
         /* Height is 100% the width of the item. This is equivalent to 1:1 aspect ratio */
-        --app-grid-item-height: 25%;
+        --app-grid-item-height: 200px;
       }
 
       paper-dialog-scrollable {
@@ -18,22 +18,21 @@
       }
 
       h1 {
-        text-align: center;
         font-size: 18px;
-        line-height: 30px;
         font-weight: 400;
+        line-height: 30px;
         margin: 10px 20px;
+        text-align: center;
         vertical-align: middle;
       }
 
       ul {
+        list-style: none;
         margin: 0;
         padding: 0;
-        list-style: none;
       }
 
       .stats-item {
-        background-color: white;
       }
 
       #stats-dialog {
@@ -51,6 +50,7 @@
 
     <ul class="app-grid" has-aspect-ratio>
       <li><div class="stats-item"><zero-stat type="grimoire" name="Grimoire"></zero-stat></div></li>
+      <li><div class="stats-item"><zero-stat type="kd" name="K/D"></zero-stat></div></li>
       <li><div class="stats-item"><zero-stat type="mot" name="Moments of Triumph"></zero-stat></div></li>
     </ul>
   </template>

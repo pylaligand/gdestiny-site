@@ -13,7 +13,6 @@
       .stat {
         cursor: pointer;
         display: block;
-        height: auto;
         width: 100%;
       }
 
@@ -177,6 +176,31 @@
         }.bind(this));
       },
 
+      _loadKDData: function() {
+        $.getJSON('https://gdestiny-server.herokuapp.com/kd', function(json) {
+          this._chartOptions = this._getChartOptions(json.length);
+          var rows = [[
+            'Guardian',
+            'K/D',
+            { role: 'style' },
+            { role: 'annotation' }
+          ]];
+          $.each(json, function(index, value) {
+            var platform = value.platform;
+            var kd = value.kd;
+
+            var color = platform == "xb" ? "#64DD17" : "#3366CC";
+            rows.push([
+                value.name,
+                kd,
+                color,
+                kd.toLocaleString(),
+            ]);
+          });
+          this._chartData = rows;
+        }.bind(this));
+      },
+
       _setClickHandlers: function() {
         var statsCard = this._root.querySelector('#' + this.type);
         statsCard.addEventListener('click', function() {
@@ -189,6 +213,8 @@
           this._loadGrimoireChartData();
         } else if (this.type == 'mot') {
           this._loadMoTChartData();
+        } else if (this.type == 'kd') {
+          this._loadKDData();
         }
         var dialog = document.getElementById(this.type + '-dialog');
         dialog.open();

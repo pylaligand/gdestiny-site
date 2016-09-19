@@ -101,8 +101,14 @@
       },
 
       ready: function() {
-        $.getJSON('https://api.twitch.tv/kraken/users/' + this.streamer,
-            this._handleStreamerInfoReceived.bind(this));
+        $.ajax({
+         type: 'GET',
+         url: 'https://api.twitch.tv/kraken/users/' + this.streamer,
+         headers: {
+           'Client-ID': '9ob60m56gzoz9ydsq6d6aeqp7w1ckqp'
+         },
+         success: this._handleStreamerInfoReceived.bind(this)
+        });
       },
 
       _handleStreamerInfoReceived: function(json) {
@@ -115,8 +121,14 @@
         // We have the streamer information, now get the stream information
         // which should tell us if there is an active stream (i.e. a channel) or
         // if they are offline.
-        $.getJSON('https://api.twitch.tv/kraken/streams/' + this.streamer,
-            this._handleStreamReceived.bind(this));
+        $.ajax({
+         type: 'GET',
+         url: 'https://api.twitch.tv/kraken/streams/' + this.streamer,
+         headers: {
+           'Client-ID': '9ob60m56gzoz9ydsq6d6aeqp7w1ckqp'
+         },
+         success: this._handleStreamReceived.bind(this)
+        });
       },
 
       _handleStreamReceived: function(json) {
