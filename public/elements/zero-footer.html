@@ -3,13 +3,10 @@
   <template>
     <style>
       .footer {
-        background-color: #fff;
-        border-top: 1px solid #efefef;
         display: inline-block;
         font-size: 14px;
         font-weight: 300;
         line-height: 24px;
-        margin: 16px 0 0 0;
         padding: 20px 0;
         width: 100%;
       }
@@ -22,6 +19,7 @@
       .footer .right {
         float: right;
         margin-right: 20px;
+        text-align: right;
       }
 
       .footer img {
@@ -52,13 +50,19 @@
         This site is developed by clan members and is not financed by or associated with
         <a href="https://www.bungie.net" target="_blank">Bungie</a> in any way.
         <br>
-        Data and media used on this site is the property of <a href="https://www.bungie.net" target="_blank">Bungie</a>.
-        PvP statistics brought to you by <a href="https://guardian.gg" target="_blank">guardian.gg</a> 
+        Some data and media used on this site is the property of <a href="https://www.bungie.net" target="_blank">Bungie</a>.
+        <br>
+        PvP statistics brought to you by <a href="https://guardian.gg" target="_blank">guardian.gg</a>.
       </div>
       <div class="right">
         <a class="contact" href="mailto:cayde@gdestiny.com" target="_blank">
           Contact us<img src="/images/icon_destiny.png"/>
         </a>
+        <div>
+          <a href="https://www.github.com/pylaligand/gdestiny-site" target="_blank">frontend</a>
+          <a href="https://www.github.com/pylaligand/gdestiny-server" target="_blank">backend</a>
+          <img src="/images/github.png"/>
+        </div>
         <div class="donation">
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
             <input type="hidden" name="cmd" value="_s-xclick">
