@@ -1,0 +1,247 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <title>Hundred Zeros - Tournaments</title>
+
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" type="text/css">
+
+  <script src="components/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="/elements/zero-analytics.html">
+  <link rel="import" href="/elements/zero-footer.html">
+
+  <link rel="import" href="components/app-layout/app-box/app-box.html">
+  <link rel="import" href="components/app-layout/app-header/app-header.html">
+  <link rel="import" href="components/app-layout/app-scroll-effects/app-scroll-effects.html">
+  <link rel="import" href="components/app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="components/iron-icons/iron-icons.html">
+  <link rel="import" href="components/paper-card/paper-card.html">
+  <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
+
+  <script type="text/javascript" src="/components/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="/components/jquery-bracket/dist/jquery.bracket.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/components/jquery-bracket/dist/jquery.bracket.min.css" />
+
+  <style is="custom-style">
+    body {
+      background-color: #eee;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 30px;
+      margin: 0;
+    }
+
+    app-box {
+      bottom: 0;
+      left: 0;
+      position: fixed;
+      right: 0;
+      top: 0;
+      --app-box-background-front-layer: {
+        background-image: url(images/destiny-banner-roi-fireteam2.jpg);
+        background-repeat: no-repeat;
+        background-size: 100%;
+      };
+    }
+
+    app-header {
+      @apply(--layout-fixed-top);
+      color: #fff;
+      --app-header-background-rear-layer: {
+        background-color: rgba(0, 0, 0, 0.5);
+      };
+    }
+
+    paper-icon-button {
+      --paper-icon-button-ink-color: white;
+    }
+
+    app-toolbar a,
+    app-toolbar a:visited,
+    app-toolbar a:hover {
+      color: #fff;
+    }
+
+    .content {
+      background-color: #fff;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+      color: #333;
+      margin: 260px 270px 120px;
+      padding: 15px 15px 15px;
+      position: relative;
+    }
+
+    [main-title] {
+      font-family: 'Roboto';
+      font-weight: 300;
+      margin-left: 35px;
+    }
+
+    h2 {
+      margin: 30px 0 14px;
+    }
+
+    paper-card {
+       box-sizing: border-box;
+       max-width: 500px;
+       width: 400px;
+       margin: 4px;
+       flex: 0 0 auto;
+
+       --paper-card-header: {
+         background-color: #eee;
+       }
+     }
+
+     .heading {
+       background-color: red;
+     }
+  </style>
+
+</head>
+
+<body unresolved>
+  <app-box effects="parallax-background"
+           effects-config='{"parallax-background": {"scalar": -0.5}}'>
+  </app-box>
+
+  <div class="content">
+    We're excited to announce our first ever clan PvP tournament!
+    <p>
+    The tournament will take place between November 12th and December 3rd. Sorry Playstation folks, but we'll focus on
+    Xbox for the first iteration and will expand in the future.
+    <p>
+    This is a 4v4 team-based tournament with a group stage followed by an elimination stage.  Matches are played as
+    best of 3 games, with games played in the following playlists: <b>Skirmish</b>, <b>Salvage</b>, and <b>Elimination</b>.
+    For each game, a map and a modifier (see below) will be assigned by the organization.
+    <p>
+    The group stage determines seeding for the elimination stage. The final match will be played as best of 5, as
+    will the match for third place
+    <p>
+    <h3>Game Rules</h3>
+    No particular restriction will be imposed on equipment and subclass perks outside of modifiers. Game modifiers will be similar to regular Destiny modifiers.
+    Sample modifiers:
+    <ul>
+      <li>Melting Pot: teams must have at least one subclass of each element</li>
+      <li>Praise the Sun: all players must use a solar subclass</li>
+      <li>Electric Boogaloo: all players must use an arc subclass</li>
+      <li>The Dark Side: all players must use a void subclass</li>
+      <li>Multi-tool: maximum one weapon of each type per team (one person cannot use heavy if teams have 4 players)</li>
+      <li>Stormtroopers: all team members must pick the same weapon types</li>
+      <li>Standard issue: no exotic equipment allowed</li>
+      <li>Inferno: self-explanatory</li>
+    </ul>
+
+    <h2>Teams</h2>
+
+    <paper-card heading="Team Awesome">
+      <div class="card-actions">
+        <a href="http://guardian.gg/en/profile/1/fathert0m" target="_blank">fathert0m</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/mscherme" target="_blank">mscherme</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/hawkbatt" target="_blank">hawkbatt</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/jjsilo" target="_blank">jjsilo</a>
+      </div>
+    </paper-card>
+
+    <paper-card heading="Team Brilliant">
+      <div class="card-actions">
+        <a href="http://guardian.gg/en/profile/1/etennis07" target="_blank">etennis07</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/DJG0509" target="_blank">DJG0509</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/n0rmaln0rman" target="_blank">n0rmaln0rman</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Bionyx187" target="_blank">Bionyx187</a>
+      </div>
+    </paper-card>
+
+    <paper-card heading="Team Crazy">
+      <div class="card-actions">
+        <a href="http://guardian.gg/en/profile/1/xx%20new%20guy%20xx" target="_blank">xx new guy xx</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/badassler" target="_blank">badassler</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/aizdaman" target="_blank">aizdaman</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Viperssd" target="_blank">Viperssd</a>
+      </div>
+    </paper-card>
+
+    <paper-card heading="Team Dauntless">
+      <div class="card-actions">
+        <a href="http://guardian.gg/en/profile/1/mauddib1017" target="_blank">mauddib1017</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Dreamforge" target="_blank">Dreamforge</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Chiva%20online" target="_blank">Chiva online</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Sch00t3r" target="_blank">Sch00t3r</a>
+      </div>
+    </paper-card>
+
+    <paper-card heading="Team Electric">
+      <div class="card-actions">
+        <a href="http://guardian.gg/en/profile/1/Lord%20Infernus" target="_blank">Lord Infernus</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/TXT4NRG" target="_blank">TXT4NRG</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/TheMikhail" target="_blank">TheMikhail</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/ME4T" target="_blank">ME4T</a>
+      </div>
+    </paper-card>
+
+    <paper-card heading="Team Fabulous">
+      <div class="card-actions">
+        <a href="http://guardian.gg/en/profile/1/kevmanx" target="_blank">kevmanx</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Greggoth" target="_blank">Greggoth</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/teawithtanya" target="_blank">teawithtanya</a>
+        <br>
+        <a href="http://guardian.gg/en/profile/1/Katz%2029M" target="_blank">Katz 29M</a>
+      </div>
+    </paper-card>
+
+    <p>
+    Stay tuned for more...
+  </div>
+
+  <!-- The header is added at the end on purpose.  Adding it before the content will
+       cause the content to overlay the header on scroll up -->
+  <app-header reveals>
+    <app-toolbar>
+      <a href="/"><paper-icon-button icon="arrow-back"></paper-icon-button></a>
+      <div main-title>Tournaments</div>
+    </app-toolbar>
+  </app-header>
+
+  <zero-footer></zero-footer>
+  <zero-analytics key="UA-81409202-1"></zero-analytics>
+
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      var appHeader = document.querySelector('app-header');
+      var appBox = document.querySelector('app-box');
+      var fadeBackgroundEffect = appHeader.createEffect('fade-background');
+
+      window.addEventListener('scroll', function() {
+        var progress = appBox.getScrollState().progress;
+        var isCondensed = progress > 0.25;
+        fadeBackgroundEffect.run(isCondensed ? 1 : 0);
+        appHeader.shadow = isCondensed;
+      });
+    });
+  </script>
+
+</body>
+</html>
