@@ -24,8 +24,6 @@
   <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
 
   <script type="text/javascript" src="/components/jquery/dist/jquery.js"></script>
-  <script type="text/javascript" src="/components/jquery-bracket/dist/jquery.bracket.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/components/jquery-bracket/dist/jquery.bracket.min.css" />
 
   <style is="custom-style">
     body {
@@ -101,6 +99,14 @@
 
      .heading {
        background-color: red;
+     }
+
+     table {
+       border: 1px solid #eee;
+       width: 100%;
+     }
+     tr:nth-child(even) {
+      background-color: #eee;
      }
   </style>
 
@@ -213,7 +219,49 @@
     </paper-card>
 
     <p>
-    Stay tuned for more...
+    <table>
+      <th colspan="4">Round 1</th>
+      <tr>
+        <td>Team Bubblegum vs. Game of Thorns</td>
+        <td>Skirmish<br />Shores of Time<br />Melting Point</td>
+        <td>Elimination<br />Bannerfall<br />Electic Boogaloo</td>
+        <td>Salvage<br />Rusted Lands<br />Multi-Tool</td>
+      </tr>
+      <tr>
+        <td>Team /dev/null vs. Felwinter is Coming</td>
+        <td>Skirmish<br />The Timekeeper<br />Multi-Tool</td>
+        <td>Elimination<br />The Drifter<br />Praise the Sun</td>
+        <td>Salvage<br />Exodus Blue<br />Electic Boogaloo</td>
+      </tr>
+      <tr>
+        <td>Shotgun Buffalo's vs. Team Blueberry</td>
+        <td>Skirmish<br />Memento<br />Stormtroopers</td>
+        <td>Elimination<br />The Drifter<br />Standard Issue</td>
+        <td>Salvage<br />The Last Exit<br />Electic Boogalo</td>
+      </tr>
+    </table>
+
+    <table>
+      <th colspan="4">Round 2</th>
+      <tr>
+        <td>Team /dev/null vs. Game of Thorns</td>
+        <td>Skirmish<br />Memento<br />Stormtroopers</td>
+        <td>Elimination<br />Bannerfall<br />Inferno</td>
+        <td>Salvage<br />Blind Watch<br />Multi-Tool</td>
+      </tr>
+      <tr>
+        <td>Shotgun Buffalo's vs. Team Bubblegum</td>
+        <td>Skirmish<br />Pantheon<br />Inferno</td>
+        <td>Elimination<br />Anomaly<br />Dark Side</td>
+        <td>Salvage<br />Twilight Gap<br />Melting Pot</td>
+      </tr>
+      <tr>
+        <td>Felwinter is Coming vs. Team Blueberry</td>
+        <td>Skirmish<br />Shores of Time<br />Dark Side</td>
+        <td>Elimination<br />Rusted Lands<br />Standard Issue</td>
+        <td>Salvage<br />Burning Shrine<br />Multi-Tool</td>
+      </tr>
+    </table>
   </div>
 
   <!-- The header is added at the end on purpose.  Adding it before the content will
