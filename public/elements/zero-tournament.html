@@ -1,0 +1,370 @@
+<link rel="import" href="../components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../components/iron-icons/hardware-icons.html">
+<link rel="import" href="../components/paper-badge/paper-badge.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/paper-card/paper-card.html">
+<link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../components/paper-styles/paper-styles.html">
+<link rel="import" href="../components/paper-styles/color.html">
+<link rel="import" href="../components/paper-styles/typography.html">
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
+
+<dom-module id="zero-tournament">
+  <template>
+    <style is="custom-style">
+      paper-card {
+        width: 100%;
+        margin-top: 20px;
+        --paper-card-header-color: #757575;
+        --paper-card-header-text: {
+          font-size: 25px;
+          font-weight: 200;
+        };
+      }
+
+      paper-card .team-card {
+         box-sizing: border-box;
+         width: 30%;
+         margin: 4px;
+         flex: 0 0 auto;
+         --paper-card-header: {
+           background-color: #eee;
+           padding: 0px;
+         }
+       }
+
+       .round-card {
+          box-sizing: border-box;
+          width: 100%;
+          margin: 4px;
+          flex: 0 0 auto;
+          --paper-card-header: {
+            background-color: #eee;
+          }
+        }
+
+      .fg-content {
+        @apply(--layout-flex);
+        float: left;
+      }
+
+      .fg-name {
+        margin: 10px 0;
+        font-size: 30px;
+        font-weight: 200;
+      }
+
+      .tournament-teams {
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+
+      .question {
+        border: 1px solid #e4e4e4;
+        margin-bottom: 10px;
+      }
+
+      .question .q {
+        background-color: #f5f5f5;
+        font-size: 20px;
+        text-align:left;
+        padding: 5px;
+      }
+
+      .question .a {
+        display: flex;
+        text-align: left;
+        padding: 5px 10px;
+      }
+
+      .question .a::before {
+        content: '\"';
+        font-size: 35px;
+        font-style:italic;
+        padding-right: 5px;
+        padding-top: 8px;
+        text-transform: capitalize;
+      }
+
+      .round-details {
+        border: 1px solid #eee;
+        width: 100%;
+      }
+
+      .Titan::after {
+        content: ' (T)';
+      }
+
+      .Hunter::after {
+        content: ' (H)';
+      }
+
+      .Warlock::after {
+        content: ' (W)';
+      }
+
+      a,
+      a:active,
+      a:visited {
+        color: #000;
+        text-decoration: none;
+      }
+
+      hr {
+        width: 100px;
+        height: 1px;
+        border: none;
+        margin: 20px auto;
+        background-color: black;
+      }
+
+      table {
+        border: 1px solid #eee;
+        width: 100%;
+      }
+
+      .match-title {
+        background-color: #eee;
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+      }
+
+      .team-name {
+        display: inline-flex;
+        margin-left: 30px;
+        margin-right: 30px;
+      }
+
+      .red-badge {
+        --paper-badge-background: var(--paper-red-300);
+      }
+      .green-badge {
+        --paper-badge-background: var(--paper-green-300);
+      }
+      .blue-badge {
+        --paper-badge-background: var(--paper-blue-300);
+      }
+
+      .team-name > paper-badge {
+        --paper-badge-margin-left: -25px;
+      }
+
+      .match-details {
+        display: inline-flex;
+        width: 100%;
+      }
+
+      .match-detail {
+        font-size: 16px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .game-title {
+        border-bottom: 1px solid #eee;
+        font-size: 20px;
+        color: #757575;
+      }
+
+      .teams {
+        width: 100%;
+      }
+    </style>
+
+    <paper-card heading="[[displayName]]">
+      <div class="card-actions">
+        <!-- <div class="tournament-teams">Tournament Information</div> -->
+        <!-- <paper-icon-button id="toggle"
+                           icon="hardware:keyboard-arrow-up"
+                           title="More Info"
+                           style="float:right;"></paper-icon-button> -->
+        <!-- <iron-collapse id="[[tournament]]" style="width:100%;"> -->
+
+        <template is="dom-repeat" items="[[rounds]]" as="round">
+          <paper-card heading="{{round.name}}" class="round-card">
+            <div class="card-actions">
+              <template is="dom-repeat" items="{{round.matches}}" as="match">
+                <div class="round-details">
+                  <div class="match-title">
+                    <div class="team-name">
+                      <span><a href="#{{match.alpha.id}}">{{match.alpha.name}}</a></span><paper-badge for="number" label="{{match.alpha.score}}" class$="{{getScoreBadgeClass(match.alpha.score)}}"></paper-badge>
+                    </div>
+                    vs.
+                    <div class="team-name">
+                      <span><a href="#{{match.bravo.id}}">{{match.bravo.name}}</a></span>
+                      <paper-badge for="number" label="{{match.bravo.score}}" class$="{{getScoreBadgeClass(match.bravo.score)}}"></paper-badge>
+                    </div>
+                  </div>
+                  <div class="match-details">
+                    <template is="dom-repeat" items="{{match.games}}" as="game">
+                      <div class="match-detail">
+                        <div class="game-title">
+                          <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank">Game {{game.number}}</a>
+                        </div>
+                        <div>{{game.playlist}}</div>
+                        <div>{{game.map}}</div>
+                        <div>{{game.modifierName}}</div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </paper-card>
+        </template>
+
+        <hr>
+        <div class="teams">
+          <template is="dom-repeat" items="[[teams]]" as="team">
+            <paper-card heading="{{team.name}}" class="team-card" id="{{team.id}}">
+              <div class="card-actions">
+                <template is="dom-repeat" items="{{team.players}}" as="player">
+                  <!-- TODO: Add badge for class -->
+                  <a href="http://guardian.gg/en/profile/1/{{player.name}}" target="_blank"><span class$="{{player.class}}">{{player.name}}</span></a>
+                  <br>
+                </template>
+                <hr>
+                Wins: {{team.ranking.wins}} <br>
+                Losses: {{team.ranking.losses}} <br>
+                Games Won: {{team.ranking.gamesWon}}
+              </div>
+            </paper-card>
+          </template>
+        </div>
+
+        <hr>
+        <paper-card heading="Modifiers" class="round-card">
+          <template is="dom-repeat" items="[[modifiers]]" as="modifier">
+            <div class="card-actions">
+              <table class="fixed">
+                  <col width="33%">
+                  <col width="66%">
+                  <tr>
+                    <td colspan="1">{{modifier.name}}</td>
+                    <td colspan="3">{{modifier.description}}</td>
+                  </tr>
+              </table>
+            </div>
+        </template>
+      </paper-card>
+
+        <!-- </iron-collapse> -->
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'zero-tournament',
+      properties: {
+        tournament: String,
+        displayName: String,
+        teams: Array,
+        rounds: Array,
+        teamNames: Object,
+        modifiers: Array,
+        modifierDetails: Object
+      },
+
+      getScoreBadgeClass: function(score) {
+        if (score >= 2) {
+          return 'green-badge';
+        } else if (score == 1){
+          return 'red-badge';
+        } else {
+          return 'blue-badge';
+        }
+      },
+
+      attached: function() {
+        this._updateGridStyles = this._updateGridStyles || function() {
+          this.updateStyles();
+        }.bind(this);
+        window.addEventListener('resize', this._updateGridStyles);
+      },
+
+      detached: function() {
+        window.removeEventListener('resize', this._updateGridStyles);
+      },
+
+      ready: function() {
+        this.teamNames = {};
+        this.modifierDetails = {};
+        $.getJSON('https://gdestiny-server.herokuapp.com/' + this.tournament, function(json) {
+          this._createModifierDetails(json);
+          this.modifiers = json.modifiers;
+          this.teams = this._createTeams(json);
+          this.rounds = this._createRounds(json);
+        }.bind(this));
+
+        var toggle = Polymer.dom(this.root).querySelector('#toggle');
+        if (!toggle) {
+          return;
+        }
+
+        toggle.addEventListener('click', function() {
+          this._toggle();
+        }.bind(this));
+      },
+
+      _createModifierDetails: function(json) {
+        var modifiers = json.modifiers;
+        for (var i = 0; i < modifiers.length; i++) {
+          var modifier = modifiers[i];
+          this.modifierDetails[modifier.id] = modifier;
+        }
+      },
+
+      _createTeams: function(json) {
+          var teams = json.teams;
+          for (var i = 0; i < teams.length; i++) {
+            var team = teams[i];
+            this.teamNames[team.id] = team.name;
+          }
+          var rankings = json.rankings;
+          for (var i = 0; i < rankings.length; i++) {
+            var ranking = rankings[i];
+            for (var j = 0; j < teams.length; j++) {
+              var team = teams[j];
+              if (team['id'] == ranking['team']) {
+                team['ranking'] = ranking;
+                continue;
+              }
+            }
+          }
+
+          return teams;
+      },
+
+      _createRounds: function(json) {
+        var rounds = [];
+        for (var i = 0; i < json['round-robin'].length; i++) {
+          var round = json['round-robin'][i];
+          for (var j = 0; j < round['matches'].length; j++) {
+            var match = round['matches'][j];
+            match.alpha['name'] = this.teamNames[match.alpha.id];
+            match.bravo['name'] = this.teamNames[match.bravo.id];
+
+            for (var k = 0; k < match['games'].length; k++) {
+              var game = match['games'][k];
+              game['number'] = k + 1;
+              game['modifierName'] = this.modifierDetails[game['modifier']].name;
+            }
+          }
+          rounds.push(round);
+        }
+        return rounds;
+      },
+
+      _toggle: function() {
+        var moreInfo = document.getElementById(this.tournament);
+        var iconButton = Polymer.dom(event).localTarget;
+        iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
+                                          : 'hardware:keyboard-arrow-down';
+        moreInfo.toggle();
+      }
+
+    });
+  </script>
+</dom-module>
