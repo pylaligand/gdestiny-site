@@ -1,6 +1,5 @@
 <link rel="import" href="../components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../components/iron-icons/hardware-icons.html">
-<link rel="import" href="../components/paper-badge/paper-badge.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/paper-card/paper-card.html">
 <link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
@@ -55,41 +54,11 @@
         font-weight: 200;
       }
 
-      .tournament-teams {
-        display: inline-block;
-        margin-bottom: 10px;
-      }
-
-      .question {
-        border: 1px solid #e4e4e4;
-        margin-bottom: 10px;
-      }
-
-      .question .q {
-        background-color: #f5f5f5;
-        font-size: 20px;
-        text-align:left;
-        padding: 5px;
-      }
-
-      .question .a {
-        display: flex;
-        text-align: left;
-        padding: 5px 10px;
-      }
-
-      .question .a::before {
-        content: '\"';
-        font-size: 35px;
-        font-style:italic;
-        padding-right: 5px;
-        padding-top: 8px;
-        text-transform: capitalize;
-      }
-
-      .round-details {
+      .match-info {
         border: 1px solid #eee;
         width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
       }
 
       .Titan::after {
@@ -131,24 +100,30 @@
         width: 100%;
       }
 
+      .match-toggle {
+        float: right;
+      }
+
       .team-name {
-        display: inline-flex;
-        margin-left: 30px;
-        margin-right: 30px;
+        display: inline-block;
       }
 
       .red-badge {
-        --paper-badge-background: var(--paper-red-300);
+        background-color: var(--google-red-300);
       }
       .green-badge {
-        --paper-badge-background: var(--paper-green-300);
+        background-color: var(--google-green-300);
       }
       .blue-badge {
-        --paper-badge-background: var(--paper-blue-300);
+        background-color: var(--google-blue-300);
       }
 
-      .team-name > paper-badge {
-        --paper-badge-margin-left: -25px;
+      .score-badge {
+        display: inline-block;
+        width: 30px;
+        margin: 5px;
+        border-radius: 15px;
+        color: #fff;
       }
 
       .match-details {
@@ -175,40 +150,41 @@
 
     <paper-card heading="[[displayName]]">
       <div class="card-actions">
-        <!-- <div class="tournament-teams">Tournament Information</div> -->
-        <!-- <paper-icon-button id="toggle"
-                           icon="hardware:keyboard-arrow-up"
-                           title="More Info"
-                           style="float:right;"></paper-icon-button> -->
-        <!-- <iron-collapse id="[[tournament]]" style="width:100%;"> -->
-
         <template is="dom-repeat" items="[[rounds]]" as="round">
           <paper-card heading="{{round.name}}" class="round-card">
             <div class="card-actions">
               <template is="dom-repeat" items="{{round.matches}}" as="match">
-                <div class="round-details">
+                <div class="match-info" on-click="_toggleMatch">
                   <div class="match-title">
+                    <paper-icon-button class="match-toggle"
+                        icon="hardware:keyboard-arrow-down"
+                        title="More Info"
+                        >
+                    </paper-icon-button>
                     <div class="team-name">
-                      <span><a href="#{{match.alpha.id}}">{{match.alpha.name}}</a></span><paper-badge for="number" label="{{match.alpha.score}}" class$="{{getScoreBadgeClass(match.alpha.score)}}"></paper-badge>
+                      <div class$="score-badge {{getScoreBadgeClass(match.alpha.score)}}">{{match.alpha.score}}</div>
+                      <span><a href="#{{match.alpha.id}}" on-click="_stopPropagation">{{match.alpha.name}}</a></span>
                     </div>
                     vs.
                     <div class="team-name">
-                      <span><a href="#{{match.bravo.id}}">{{match.bravo.name}}</a></span>
-                      <paper-badge for="number" label="{{match.bravo.score}}" class$="{{getScoreBadgeClass(match.bravo.score)}}"></paper-badge>
+                      <span><a href="#{{match.bravo.id}}" on-click="_stopPropagation">{{match.bravo.name}}</a></span>
+                      <div class$="score-badge {{getScoreBadgeClass(match.bravo.score)}}">{{match.bravo.score}}</div>
                     </div>
                   </div>
-                  <div class="match-details">
-                    <template is="dom-repeat" items="{{match.games}}" as="game">
-                      <div class="match-detail">
-                        <div class="game-title">
-                          <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank">Game {{game.number}}</a>
+                  <iron-collapse class="match-details-collapse">
+                    <div class="match-details">
+                      <template is="dom-repeat" items="{{match.games}}" as="game">
+                        <div class="match-detail">
+                          <div class="game-title">
+                            <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank">Game {{game.number}}</a>
+                          </div>
+                          <div>{{game.playlist}}</div>
+                          <div>{{game.map}}</div>
+                          <div>{{game.modifierName}}</div>
                         </div>
-                        <div>{{game.playlist}}</div>
-                        <div>{{game.map}}</div>
-                        <div>{{game.modifierName}}</div>
-                      </div>
-                    </template>
-                  </div>
+                      </template>
+                    </div>
+                  </iron-collapse>
                 </div>
               </template>
             </div>
@@ -345,6 +321,12 @@
             var match = round['matches'][j];
             match.alpha['name'] = this.teamNames[match.alpha.id];
             match.bravo['name'] = this.teamNames[match.bravo.id];
+            if (match.alpha.score == -1) {
+              match.alpha.score = '-';
+            }
+            if (match.bravo.score == -1) {
+              match.bravo.score = '-';
+            }
 
             for (var k = 0; k < match['games'].length; k++) {
               var game = match['games'][k];
@@ -357,14 +339,17 @@
         return rounds;
       },
 
-      _toggle: function() {
-        var moreInfo = document.getElementById(this.tournament);
-        var iconButton = Polymer.dom(event).localTarget;
-        iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-up'
-                                          : 'hardware:keyboard-arrow-down';
-        moreInfo.toggle();
-      }
+      _stopPropagation: function(e) {
+        e.stopPropagation();
+      },
 
+      _toggleMatch: function(e) {
+        var target = Polymer.dom(e.currentTarget);
+        var details = target.querySelector('.match-details-collapse');
+        details.toggle();
+        var toggleIcon = target.querySelector('.match-toggle');
+        toggleIcon.icon = details.opened ? 'hardware:keyboard-arrow-up' : 'hardware:keyboard-arrow-down';
+      }
     });
   </script>
 </dom-module>
