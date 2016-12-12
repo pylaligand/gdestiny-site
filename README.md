@@ -1,15 +1,14 @@
-# gDestiny / Hundred Zeros website
+# Hundred Zeros website
 
 
 ### Setting up
 
-1. Fork the [project](https://github.com/pylaligand/gdestiny-site) on GitHub.
-2. Clone the forked repo
+Fork the [project](https://github.com/pylaligand/gdestiny-site) on GitHub and clone the forked repo:
 ```
 git clone https://github.com/YOUR_USERNAME/gdestiny-site.git
 cd gdestiny-site
 ```
-3. Track the main repository
+Make sure you track the main repository and not the clone though:
 ```
 git remote add upstream https://github.com/pylaligand/gdestiny-site.git
 git remote set-url --push upstream you_shall_not_push
@@ -75,5 +74,5 @@ firebase deploy -m "Added such and such feature"
 ```
 
 Guidelines:
-- keep the deployment message short and explicit about the content of the update
+- keep the deployment message short and explicit about the content of the update;
 - always deploy from a clean, up-to-date *master* branch.
