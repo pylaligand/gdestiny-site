@@ -3,9 +3,10 @@
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/paper-card/paper-card.html">
 <link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../components/paper-styles/paper-styles.html">
 <link rel="import" href="../components/paper-styles/color.html">
+<link rel="import" href="../components/paper-styles/paper-styles.html">
 <link rel="import" href="../components/paper-styles/typography.html">
+<link rel="import" href="../components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
 <link rel="import" href="../components/vaadin-grid/vaadin-grid.html">
@@ -156,6 +157,13 @@
         color: #757575;
       }
 
+      .game-modifier > paper-tooltip {
+        --paper-tooltip-opacity: 1.0;
+        --paper-tooltip: {
+          font-size: 15px;
+        }
+      }
+
       .teams {
         width: 100%;
       }
@@ -193,7 +201,10 @@
                           </div>
                           <div>{{game.playlist}}</div>
                           <div>{{game.map}}</div>
-                          <div>{{game.modifierName}}</div>
+                          <div class="game-modifier">
+                            <div>{{game.modifier.name}}</div>
+                            <paper-tooltip>{{game.modifier.description}}</paper-tooltip>
+                          </div>
                         </div>
                       </template>
                     </div>
@@ -244,22 +255,6 @@
           </template>
         </div>
 
-        <hr>
-        <paper-card heading="Modifiers" class="round-card">
-          <template is="dom-repeat" items="[[modifiers]]" as="modifier">
-            <div class="card-actions">
-              <table class="fixed">
-                  <col width="33%">
-                  <col width="66%">
-                  <tr>
-                    <td colspan="1">{{modifier.name}}</td>
-                    <td colspan="3">{{modifier.description}}</td>
-                  </tr>
-              </table>
-            </div>
-        </template>
-      </paper-card>
-
         <!-- </iron-collapse> -->
       </div>
     </paper-card>
@@ -273,7 +268,6 @@
         teams: Array,
         rounds: Array,
         teamNames: Object,
-        modifiers: Array,
         modifierDetails: Object
       },
 
@@ -305,7 +299,6 @@
         this.modifierDetails = {};
         $.getJSON('https://gdestiny-server.herokuapp.com/' + this.tournament, function(json) {
           this._createModifierDetails(json);
-          this.modifiers = json.modifiers;
           this.teams = this._createTeams(json);
           this.rounds = this._createRounds(json);
           root.querySelector('#rankings').items = this._createRankings(json);
@@ -368,7 +361,7 @@
             for (var k = 0; k < match['games'].length; k++) {
               var game = match['games'][k];
               game['number'] = k + 1;
-              game['modifierName'] = this.modifierDetails[game['modifier']].name;
+              game['modifier'] = this.modifierDetails[game['modifier']];
             }
           }
           rounds.push(round);
