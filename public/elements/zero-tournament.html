@@ -8,6 +8,7 @@
 <link rel="import" href="../components/paper-styles/typography.html">
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../components/vaadin-grid/vaadin-grid.html">
 
 <dom-module id="zero-tournament">
   <template>
@@ -204,6 +205,32 @@
         </template>
 
         <hr>
+        <div class="rankings">
+          <paper-card heading="Rankings" class="round-card">
+            <vaadin-grid id="rankings">
+              <table>
+                <colgroup>
+                  <col name="team" />
+                  <col name="matchesPlayed" />
+                  <col name="wins" />
+                  <col name="losses" />
+                  <col name="gamesWon" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th>Matches played</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Games won</th>
+                  </tr>
+                </thead>
+              </table>
+            </vaadin-grid>
+          </paper-card>
+        </div>
+
+        <hr>
         <div class="teams">
           <template is="dom-repeat" items="[[teams]]" as="team">
             <paper-card heading="{{team.name}}" class="team-card" id="{{team.id}}">
@@ -212,10 +239,6 @@
                   <div class$="class-badge class-{{player.class}}"></div><a href="http://guardian.gg/en/profile/1/{{player.name}}" target="_blank"><span class$="isCaptain-{{player.captain}}">{{player.name}}</span></a>
                   <br>
                 </template>
-                <hr>
-                Wins: {{team.ranking.wins}} <br>
-                Losses: {{team.ranking.losses}} <br>
-                Games Won: {{team.ranking.gamesWon}}
               </div>
             </paper-card>
           </template>
@@ -276,6 +299,8 @@
       },
 
       ready: function() {
+        var root = Polymer.dom(this.root);
+
         this.teamNames = {};
         this.modifierDetails = {};
         $.getJSON('https://gdestiny-server.herokuapp.com/' + this.tournament, function(json) {
@@ -283,9 +308,10 @@
           this.modifiers = json.modifiers;
           this.teams = this._createTeams(json);
           this.rounds = this._createRounds(json);
+          root.querySelector('#rankings').items = this._createRankings(json);
         }.bind(this));
 
-        var toggle = Polymer.dom(this.root).querySelector('#toggle');
+        var toggle = root.querySelector('#toggle');
         if (!toggle) {
           return;
         }
@@ -348,6 +374,22 @@
           rounds.push(round);
         }
         return rounds;
+      },
+
+      _createRankings: function(json) {
+        var rawRankings = json['rankings'];
+        var result = [];
+        for (var i = 0; i < rawRankings.length; i++) {
+          var ranking = rawRankings[i];
+          result.push({
+            'team': this.teamNames[ranking['team']],
+            'matchesPlayed': ranking['wins'] + ranking['losses'],
+            'wins': ranking['wins'],
+            'losses': ranking['losses'],
+            'gamesWon': ranking['gamesWon']
+          });
+        }
+        return result;
       },
 
       _stopPropagation: function(e) {

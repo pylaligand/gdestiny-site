@@ -47,6 +47,7 @@
     "paper-menu-button": "PolymerElements/paper-menu-button#~1.0.3",
     "paper-tabs": "PolymerElements/paper-tabs#~1.0.4",
     "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.2",
-    "polymer": "Polymer/polymer#^1.6.1"
+    "polymer": "Polymer/polymer#^1.6.1",
+    "vaadin-grid": "^1.2.0"
   }
 }
