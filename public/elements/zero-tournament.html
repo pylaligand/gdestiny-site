@@ -23,6 +23,12 @@
         text-align: center;
       }
 
+      #intro {
+        text-align: center;
+        padding-left: 15%;
+        padding-right: 15%;
+      }
+
       paper-card {
         width: 100%;
         margin-top: 20px;
@@ -33,7 +39,7 @@
         };
       }
 
-      paper-card .team-card {
+      paper-card.team-card {
          box-sizing: border-box;
          width: 30%;
          margin: 4px;
@@ -41,7 +47,8 @@
          --paper-card-header: {
            background-color: #eee;
            padding: 0px;
-         }
+         };
+         text-align: left;
        }
 
        .round-card {
@@ -107,8 +114,20 @@
         width: 100px;
         height: 1px;
         border: none;
-        margin: 20px auto;
+        margin: 60px auto 20px auto;
         background-color: black;
+      }
+
+      h1 {
+        display: block;
+        text-align: center;
+        font-weight: 200;
+        font-size: 50px;
+      }
+
+      h2 {
+        font-weight: 200;
+        font-size: 30px;
       }
 
       table {
@@ -173,8 +192,9 @@
         }
       }
 
-      .teams {
+      #team-cards {
         width: 100%;
+        text-align: center;
       }
     </style>
 
@@ -184,15 +204,23 @@
         <paper-spinner active id="waiting-spinner"></paper-spinner>
       </div>
 
-      <paper-card heading="[[displayName]]">
+      <div>
 
-        <div class="card-actions">
+        <div id="intro">
+          Zeromania#1 is the inaugural Hundred Zeros PvP tournament, played 4v4
+          on Xbox in Fall 2016. For more details, see the
+          <a href="https://docs.google.com/document/d/1OWAoLxDMnLxPtT7NqP900FDxxJbHNOXCsoe1q_oHzvA" target="_blank">rules document</a>.
+        </div>
 
+        <div id="round-robin-phase">
+          <hr>
+          <h1>Round-robin phase</h1>
           <template is="dom-repeat" items="[[rounds]]" as="round">
-            <paper-card heading="{{round.name}}" class="round-card">
-              <div class="card-actions">
+            <h2>{{round.name}}</h2>
+            <div class="round-card">
+              <div class="card-content">
                 <template is="dom-repeat" items="{{round.matches}}" as="match">
-                  <div class="match-info" on-click="_toggleMatch">
+                  <paper-card class="match-info" on-click="_toggleMatch">
                     <div class="match-title">
                       <paper-icon-button class="match-toggle"
                           icon="hardware:keyboard-arrow-down"
@@ -226,43 +254,44 @@
                         </template>
                       </div>
                     </iron-collapse>
-                  </div>
+                  </paper-card>
                 </template>
               </div>
-            </paper-card>
+            </div>
           </template>
 
-          <hr>
-          <div class="rankings">
-            <paper-card heading="Rankings" class="round-card">
-              <vaadin-grid id="rankings">
-                <table>
-                  <colgroup>
-                    <col name="team" />
-                    <col name="matchesPlayed" />
-                    <col name="wins" />
-                    <col name="losses" />
-                    <col name="gamesWon" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Matches played</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Games won</th>
-                    </tr>
-                  </thead>
-                </table>
-              </vaadin-grid>
-            </paper-card>
-          </div>
+          <h2>Rankings</h2>
+          <paper-card class="round-card">
+            <vaadin-grid id="rankings-table">
+              <table>
+                <colgroup>
+                  <col name="team" />
+                  <col name="matchesPlayed" />
+                  <col name="wins" />
+                  <col name="losses" />
+                  <col name="gamesWon" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th>Matches played</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Games won</th>
+                  </tr>
+                </thead>
+              </table>
+            </vaadin-grid>
+          </paper-card>
+        </div>
 
+        <div id="teams">
           <hr>
-          <div class="teams">
+          <h1>Teams</h1>
+          <div id="team-cards">
             <template is="dom-repeat" items="[[teams]]" as="team">
               <paper-card heading="{{team.name}}" class="team-card" id="{{team.id}}">
-                <div class="card-actions">
+                <div class="card-content">
                   <template is="dom-repeat" items="{{team.players}}" as="player">
                     <div class$="class-badge class-{{player.class}}"></div><a href="http://guardian.gg/en/profile/1/{{player.name}}" target="_blank"><span class$="isCaptain-{{player.captain}}">{{player.name}}</span></a>
                     <br>
@@ -271,10 +300,11 @@
               </paper-card>
             </template>
           </div>
-
         </div>
 
-      </paper-card>
+      </div>
+
+    </iron-pages/>
 
   </template>
 
@@ -320,7 +350,7 @@
           this._createModifierDetails(json);
           this.teams = this._createTeams(json);
           this.rounds = this._createRounds(json);
-          root.querySelector('#rankings').items = this._createRankings(json);
+          root.querySelector('#rankings-table').items = this._createRankings(json);
           root.querySelector('#top-pages').selected = 1;
           root.querySelector('#waiting-spinner').active = 0;
         }.bind(this));
