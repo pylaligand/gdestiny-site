@@ -1,8 +1,10 @@
 <link rel="import" href="../components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../components/iron-icons/hardware-icons.html">
+<link rel="import" href="../components/iron-pages/iron-pages.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/paper-card/paper-card.html">
 <link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../components/paper-styles/color.html">
 <link rel="import" href="../components/paper-styles/paper-styles.html">
 <link rel="import" href="../components/paper-styles/typography.html">
@@ -14,6 +16,13 @@
 <dom-module id="zero-tournament">
   <template>
     <style is="custom-style">
+
+      #waiting-area {
+        height: 300px;
+        padding-top: 50px;
+        text-align: center;
+      }
+
       paper-card {
         width: 100%;
         margin-top: 20px;
@@ -169,96 +178,106 @@
       }
     </style>
 
-    <paper-card heading="[[displayName]]">
-      <div class="card-actions">
-        <template is="dom-repeat" items="[[rounds]]" as="round">
-          <paper-card heading="{{round.name}}" class="round-card">
-            <div class="card-actions">
-              <template is="dom-repeat" items="{{round.matches}}" as="match">
-                <div class="match-info" on-click="_toggleMatch">
-                  <div class="match-title">
-                    <paper-icon-button class="match-toggle"
-                        icon="hardware:keyboard-arrow-down"
-                        title="More Info"
-                        >
-                    </paper-icon-button>
-                    <div class="team-name">
-                      <div class$="score-badge {{getScoreBadgeClass(match.alpha.score)}}">{{match.alpha.score}}</div>
-                      <span><a href="#{{match.alpha.id}}" on-click="_stopPropagation">{{match.alpha.name}}</a></span>
-                    </div>
-                    vs.
-                    <div class="team-name">
-                      <span><a href="#{{match.bravo.id}}" on-click="_stopPropagation">{{match.bravo.name}}</a></span>
-                      <div class$="score-badge {{getScoreBadgeClass(match.bravo.score)}}">{{match.bravo.score}}</div>
-                    </div>
-                  </div>
-                  <iron-collapse class="match-details-collapse">
-                    <div class="match-details">
-                      <template is="dom-repeat" items="{{match.games}}" as="game">
-                        <div class="match-detail">
-                          <div class="game-title">
-                            <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank">Game {{game.number}}</a>
-                          </div>
-                          <div>{{game.playlist}}</div>
-                          <div>{{game.map}}</div>
-                          <div class="game-modifier">
-                            <div>{{game.modifier.name}}</div>
-                            <paper-tooltip>{{game.modifier.description}}</paper-tooltip>
-                          </div>
-                        </div>
-                      </template>
-                    </div>
-                  </iron-collapse>
-                </div>
-              </template>
-            </div>
-          </paper-card>
-        </template>
+    <iron-pages id="top-pages" selected="0">
 
-        <hr>
-        <div class="rankings">
-          <paper-card heading="Rankings" class="round-card">
-            <vaadin-grid id="rankings">
-              <table>
-                <colgroup>
-                  <col name="team" />
-                  <col name="matchesPlayed" />
-                  <col name="wins" />
-                  <col name="losses" />
-                  <col name="gamesWon" />
-                </colgroup>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>Matches played</th>
-                    <th>Wins</th>
-                    <th>Losses</th>
-                    <th>Games won</th>
-                  </tr>
-                </thead>
-              </table>
-            </vaadin-grid>
-          </paper-card>
-        </div>
+      <div id="waiting-area">
+        <paper-spinner active id="waiting-spinner"></paper-spinner>
+      </div>
 
-        <hr>
-        <div class="teams">
-          <template is="dom-repeat" items="[[teams]]" as="team">
-            <paper-card heading="{{team.name}}" class="team-card" id="{{team.id}}">
+      <paper-card heading="[[displayName]]">
+
+        <div class="card-actions">
+
+          <template is="dom-repeat" items="[[rounds]]" as="round">
+            <paper-card heading="{{round.name}}" class="round-card">
               <div class="card-actions">
-                <template is="dom-repeat" items="{{team.players}}" as="player">
-                  <div class$="class-badge class-{{player.class}}"></div><a href="http://guardian.gg/en/profile/1/{{player.name}}" target="_blank"><span class$="isCaptain-{{player.captain}}">{{player.name}}</span></a>
-                  <br>
+                <template is="dom-repeat" items="{{round.matches}}" as="match">
+                  <div class="match-info" on-click="_toggleMatch">
+                    <div class="match-title">
+                      <paper-icon-button class="match-toggle"
+                          icon="hardware:keyboard-arrow-down"
+                          title="More Info"
+                          >
+                      </paper-icon-button>
+                      <div class="team-name">
+                        <div class$="score-badge {{getScoreBadgeClass(match.alpha.score)}}">{{match.alpha.score}}</div>
+                        <span><a href="#{{match.alpha.id}}" on-click="_stopPropagation">{{match.alpha.name}}</a></span>
+                      </div>
+                      vs.
+                      <div class="team-name">
+                        <span><a href="#{{match.bravo.id}}" on-click="_stopPropagation">{{match.bravo.name}}</a></span>
+                        <div class$="score-badge {{getScoreBadgeClass(match.bravo.score)}}">{{match.bravo.score}}</div>
+                      </div>
+                    </div>
+                    <iron-collapse class="match-details-collapse">
+                      <div class="match-details">
+                        <template is="dom-repeat" items="{{match.games}}" as="game">
+                          <div class="match-detail">
+                            <div class="game-title">
+                              <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank">Game {{game.number}}</a>
+                            </div>
+                            <div>{{game.playlist}}</div>
+                            <div>{{game.map}}</div>
+                            <div class="game-modifier">
+                              <div>{{game.modifier.name}}</div>
+                              <paper-tooltip>{{game.modifier.description}}</paper-tooltip>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </iron-collapse>
+                  </div>
                 </template>
               </div>
             </paper-card>
           </template>
+
+          <hr>
+          <div class="rankings">
+            <paper-card heading="Rankings" class="round-card">
+              <vaadin-grid id="rankings">
+                <table>
+                  <colgroup>
+                    <col name="team" />
+                    <col name="matchesPlayed" />
+                    <col name="wins" />
+                    <col name="losses" />
+                    <col name="gamesWon" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>Matches played</th>
+                      <th>Wins</th>
+                      <th>Losses</th>
+                      <th>Games won</th>
+                    </tr>
+                  </thead>
+                </table>
+              </vaadin-grid>
+            </paper-card>
+          </div>
+
+          <hr>
+          <div class="teams">
+            <template is="dom-repeat" items="[[teams]]" as="team">
+              <paper-card heading="{{team.name}}" class="team-card" id="{{team.id}}">
+                <div class="card-actions">
+                  <template is="dom-repeat" items="{{team.players}}" as="player">
+                    <div class$="class-badge class-{{player.class}}"></div><a href="http://guardian.gg/en/profile/1/{{player.name}}" target="_blank"><span class$="isCaptain-{{player.captain}}">{{player.name}}</span></a>
+                    <br>
+                  </template>
+                </div>
+              </paper-card>
+            </template>
+          </div>
+
         </div>
 
-        <!-- </iron-collapse> -->
-      </div>
-    </paper-card>
+      </paper-card>
+
   </template>
+
   <script>
     Polymer({
       is: 'zero-tournament',
@@ -302,15 +321,8 @@
           this.teams = this._createTeams(json);
           this.rounds = this._createRounds(json);
           root.querySelector('#rankings').items = this._createRankings(json);
-        }.bind(this));
-
-        var toggle = root.querySelector('#toggle');
-        if (!toggle) {
-          return;
-        }
-
-        toggle.addEventListener('click', function() {
-          this._toggle();
+          root.querySelector('#top-pages').selected = 1;
+          root.querySelector('#waiting-spinner').active = 0;
         }.bind(this));
       },
 
