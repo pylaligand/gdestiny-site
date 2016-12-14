@@ -192,6 +192,12 @@
         }
       }
 
+      .game-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       #team-cards {
         width: 100%;
         text-align: center;
@@ -214,7 +220,7 @@
 
         <div id="round-robin-phase">
           <hr>
-          <h1>Round-robin phase</h1>
+          <h1>Group phase</h1>
           <template is="dom-repeat" items="[[rounds]]" as="round">
             <h2>{{round.name}}</h2>
             <div class="round-card">
@@ -242,7 +248,12 @@
                         <template is="dom-repeat" items="{{match.games}}" as="game">
                           <div class="match-detail">
                             <div class="game-title">
-                              <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank">Game {{game.number}}</a>
+                              Game {{game.number}}
+                              <template is="dom-if" if="{{game.id}}">
+                                <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank" on-click="_stopPropagation">
+                                  <paper-icon-button icon="icons:exit-to-app"></paper-icon-button>
+                                </a>
+                              </template>
                             </div>
                             <div>{{game.playlist}}</div>
                             <div>{{game.map}}</div>
