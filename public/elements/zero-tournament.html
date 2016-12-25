@@ -8,6 +8,7 @@
 <link rel="import" href="../components/paper-styles/color.html">
 <link rel="import" href="../components/paper-styles/paper-styles.html">
 <link rel="import" href="../components/paper-styles/typography.html">
+<link rel="import" href="../components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
@@ -220,80 +221,92 @@
 
         <div id="round-robin-phase">
           <hr>
-          <h1>Group phase</h1>
-          <template is="dom-repeat" items="[[rounds]]" as="round">
-            <h2>{{round.name}}</h2>
-            <div class="round-card">
-              <div class="card-content">
-                <template is="dom-repeat" items="{{round.matches}}" as="match">
-                  <paper-card class="match-info" on-click="_toggleMatch">
-                    <div class="match-title">
-                      <paper-icon-button class="match-toggle"
-                          icon="hardware:keyboard-arrow-down"
-                          title="More Info"
-                          >
-                      </paper-icon-button>
-                      <div class="team-name">
-                        <div class$="score-badge {{getScoreBadgeClass(match.alpha.score)}}">{{match.alpha.score}}</div>
-                        <span><a href="#{{match.alpha.id}}" on-click="_stopPropagation">{{match.alpha.name}}</a></span>
-                      </div>
-                      vs.
-                      <div class="team-name">
-                        <span><a href="#{{match.bravo.id}}" on-click="_stopPropagation">{{match.bravo.name}}</a></span>
-                        <div class$="score-badge {{getScoreBadgeClass(match.bravo.score)}}">{{match.bravo.score}}</div>
-                      </div>
-                    </div>
-                    <iron-collapse class="match-details-collapse">
-                      <div class="match-details">
-                        <template is="dom-repeat" items="{{match.games}}" as="game">
-                          <div class="match-detail">
-                            <div class="game-title">
-                              Game {{game.number}}
-                              <template is="dom-if" if="{{game.id}}">
-                                <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank" on-click="_stopPropagation">
-                                  <paper-icon-button icon="icons:exit-to-app"></paper-icon-button>
-                                </a>
-                              </template>
-                            </div>
-                            <div>{{game.playlist}}</div>
-                            <div>{{game.map}}</div>
-                            <div class="game-modifier">
-                              <div>{{game.modifier.name}}</div>
-                              <paper-tooltip>{{game.modifier.description}}</paper-tooltip>
-                            </div>
+          <h1>Schedule and results</h1>
+          <paper-tabs selected="{{selectedTab}}">
+            <paper-tab>Round-robin matches</paper-tab>
+            <paper-tab>Rankings</paper-tab>
+          </paper-tabs>
+          <iron-pages selected="{{selectedTab}}">
+            <!-- Round-robin matches -->
+            <iron-page>
+              <template is="dom-repeat" items="[[rounds]]" as="round">
+                <h2>{{round.name}}</h2>
+                <div class="round-card">
+                  <div class="card-content">
+                    <template is="dom-repeat" items="{{round.matches}}" as="match">
+                      <paper-card class="match-info" on-click="_toggleMatch">
+                        <div class="match-title">
+                          <paper-icon-button class="match-toggle"
+                              icon="hardware:keyboard-arrow-down"
+                              title="More Info"
+                              >
+                          </paper-icon-button>
+                          <div class="team-name">
+                            <div class$="score-badge {{getScoreBadgeClass(match.alpha.score)}}">{{match.alpha.score}}</div>
+                            <span><a href="#{{match.alpha.id}}" on-click="_stopPropagation">{{match.alpha.name}}</a></span>
                           </div>
-                        </template>
-                      </div>
-                    </iron-collapse>
-                  </paper-card>
-                </template>
-              </div>
-            </div>
-          </template>
+                          vs.
+                          <div class="team-name">
+                            <span><a href="#{{match.bravo.id}}" on-click="_stopPropagation">{{match.bravo.name}}</a></span>
+                            <div class$="score-badge {{getScoreBadgeClass(match.bravo.score)}}">{{match.bravo.score}}</div>
+                          </div>
+                        </div>
+                        <iron-collapse class="match-details-collapse">
+                          <div class="match-details">
+                            <template is="dom-repeat" items="{{match.games}}" as="game">
+                              <div class="match-detail">
+                                <div class="game-title">
+                                  Game {{game.number}}
+                                  <template is="dom-if" if="{{game.id}}">
+                                    <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank" on-click="_stopPropagation">
+                                      <paper-icon-button icon="icons:exit-to-app"></paper-icon-button>
+                                    </a>
+                                  </template>
+                                </div>
+                                <div>{{game.playlist}}</div>
+                                <div>{{game.map}}</div>
+                                <div class="game-modifier">
+                                  <div>{{game.modifier.name}}</div>
+                                  <paper-tooltip>{{game.modifier.description}}</paper-tooltip>
+                                </div>
+                              </div>
+                            </template>
+                          </div>
+                        </iron-collapse>
+                      </paper-card>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </iron-page>
 
-          <h2>Rankings</h2>
-          <paper-card class="round-card">
-            <vaadin-grid id="rankings-table">
-              <table>
-                <colgroup>
-                  <col name="team" />
-                  <col name="matchesPlayed" />
-                  <col name="wins" />
-                  <col name="losses" />
-                  <col name="gamesWon" />
-                </colgroup>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>Matches played</th>
-                    <th>Wins</th>
-                    <th>Losses</th>
-                    <th>Games won</th>
-                  </tr>
-                </thead>
-              </table>
-            </vaadin-grid>
-          </paper-card>
+            <!-- Rankings tab -->
+            <iron-page>
+              <paper-card class="round-card">
+                <vaadin-grid id="rankings-table">
+                  <table>
+                    <colgroup>
+                      <col name="team" />
+                      <col name="matchesPlayed" />
+                      <col name="wins" />
+                      <col name="losses" />
+                      <col name="gamesWon" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>Team</th>
+                        <th>Matches played</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Games won</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </vaadin-grid>
+              </paper-card>
+            </iron-page>
+          </iron-pages>
+
         </div>
 
         <div id="teams">
@@ -328,7 +341,8 @@
         teams: Array,
         rounds: Array,
         teamNames: Object,
-        modifierDetails: Object
+        modifierDetails: Object,
+        selectedTab: Number,
       },
 
       getScoreBadgeClass: function(score) {
@@ -355,6 +369,7 @@
       ready: function() {
         var root = Polymer.dom(this.root);
 
+        this.selectedTab = 0;
         this.teamNames = {};
         this.modifierDetails = {};
         $.getJSON('https://gdestiny-server.herokuapp.com/' + this.tournament, function(json) {
