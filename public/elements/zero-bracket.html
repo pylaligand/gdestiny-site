@@ -1,0 +1,162 @@
+<!-- Inspired by:
+   http://blog.krawaller.se/posts/exploring-a-css3-tournament-bracket/
+   -->
+
+<link rel="import" href="../components/polymer/polymer.html">
+
+<dom-module id="zero-bracket">
+
+  <template>
+    <style is="custom-style">
+      main, ul {
+        display: flex;
+      }
+
+      ul {
+        flex-direction: column;
+        width: 200px;
+        list-style: none;
+        padding: 0;
+      }
+
+      .game + li {
+        flex-grow: 1;
+      }
+
+      ul:before, ul:after {
+        content: " ";
+        display: inline-block;
+        flex-grow: .5;
+      }
+
+      .game {
+        padding-left: 20px;
+      }
+
+      .winner {
+        font-weight: bold;
+      }
+
+      .game span {
+        float: right;
+        margin-right: 5px;
+      }
+
+      .game-top {
+        border-bottom: 1px solid #aaa;
+      }
+
+      .game-top + li {
+        border-right: 1px solid #aaa;
+        min-height: 60px;
+      }
+
+      .game-bottom {
+        border-top: 1px solid #aaa;
+      }
+    </style>
+
+    <main>
+      <template is="dom-repeat" items="[[rounds]]" as="round">
+        <ul>
+          <template is="dom-repeat" items="{{round}}" as="match">
+            <li class$="{{_getAlphaClass(match)}}">
+              {{_getAlphaTeamName(match)}}
+              <template is="dom-if" if="{{_hasAlphaScore(match)}}">
+                <span>{{match.alphaScore}}</span>
+              </template>
+            </li>
+            <li>&nbsp;</li>
+            <li class$="{{_getBravoClass(match)}}">
+              {{_getBravoTeamName(match)}}
+              <template is="dom-if" if="{{_hasBravoScore(match)}}">
+                <span>{{match.bravoScore}}</span>
+              </template>
+            </li>
+            <template is="dom-if" if="{{_notAtTheEnd(round, index)}}">
+              <li>&nbsp;</li>
+            </template>
+          </template>
+        </ul>
+      </template>
+    </main>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'zero-bracket',
+      properties: {
+        rounds: Array,
+      },
+
+      _getWinner: function(match) {
+        if ("winner" in match) {
+          return match["winner"];
+        }
+        if (!match["is_bye"]) {
+          return null;
+        }
+        if ("alphaName" in match) {
+          return "alpha";
+        } else if ("bravoName" in match) {
+          return "bravo";
+        } else {
+          return null;
+        }
+      },
+
+      _getTeamClass: function(match, forAlpha) {
+        var baseClass = "game";
+        baseClass += forAlpha ? " game-top" : " game-bottom";
+        var winner = this._getWinner(match);
+        if (winner == null) {
+          return baseClass;
+        }
+        if ((forAlpha && (winner == "alpha")) ||
+            (!forAlpha && (winner == "bravo"))) {
+          baseClass += " winner";
+        }
+        return baseClass;
+      },
+
+      _getAlphaClass: function(match) {
+        return this._getTeamClass(match, true);
+      },
+
+      _getBravoClass: function(match) {
+        return this._getTeamClass(match, false);
+      },
+
+      _getTeamName: function(match, property) {
+        if (property in match) {
+          return match[property];
+        }
+        if (match["is_bye"]) {
+          return "BYE";
+        } else {
+          return "\xa0";
+        }
+      },
+
+      _getAlphaTeamName: function(match) {
+        return this._getTeamName(match, "alphaName");
+      },
+
+      _getBravoTeamName: function(match) {
+        return this._getTeamName(match, "bravoName");
+      },
+
+      _notAtTheEnd: function(round, index) {
+        return index < round.length - 1;
+      },
+
+      _hasAlphaScore: function(match) {
+        return "alphaScore" in match;
+      },
+
+      _hasBravoScore: function(match) {
+        return "bravoScore" in match;
+      },
+    });
+  </script>
+</dom-module>

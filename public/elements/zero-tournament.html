@@ -14,7 +14,10 @@
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
 <link rel="import" href="../components/vaadin-grid/vaadin-grid.html">
 
+<link rel="import" href="zero-bracket.html">
+
 <dom-module id="zero-tournament">
+
   <template>
     <style is="custom-style">
 
@@ -199,6 +202,12 @@
         justify-content: center;
       }
 
+      #bracket-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       #team-cards {
         width: 100%;
         text-align: center;
@@ -225,6 +234,7 @@
           <paper-tabs selected="{{selectedTab}}">
             <paper-tab>Round-robin matches</paper-tab>
             <paper-tab>Rankings</paper-tab>
+            <paper-tab>Elimination stage</paper-tab>
           </paper-tabs>
           <iron-pages selected="{{selectedTab}}">
             <!-- Round-robin matches -->
@@ -305,6 +315,14 @@
                 </vaadin-grid>
               </paper-card>
             </iron-page>
+
+            <!-- Elimination stage -->
+            <iron-page>
+              <div id="bracket-wrapper">
+                <zero-bracket id="bracket"></zero-bracket>
+              </div>
+            </iron-page>
+
           </iron-pages>
 
         </div>
@@ -376,6 +394,7 @@
           this._createModifierDetails(json);
           this.teams = this._createTeams(json);
           this.rounds = this._createRounds(json);
+          this._generateBracket();
           root.querySelector('#rankings-table').items = this._createRankings(json);
           root.querySelector('#top-pages').selected = 1;
           root.querySelector('#waiting-spinner').active = 0;
@@ -451,6 +470,42 @@
           });
         }
         return result;
+      },
+
+      _generateBracket: function() {
+        var data = [
+          [
+            {
+              "alphaName": "Game of Thorns",
+              "is_bye": true
+            },
+            {
+              "alphaName": "Shotgun Buffalo's",
+              "bravoName": "Team Blueberry",
+            },
+            {
+              "alphaName": "Felwinter is Coming",
+              "bravoName": "Team /dev/null",
+            },
+            {
+              "alphaName": "Team Bubblegum",
+              "is_bye": true
+            }
+          ],
+          [
+            {
+              "alphaName": "Game of Thorns",
+            },
+            {
+              "bravoName": "Team Bubblegum",
+            }
+          ],
+          [
+            {
+            }
+          ]
+        ];
+        this.$$("#bracket").rounds = data;
       },
 
       _stopPropagation: function(e) {
