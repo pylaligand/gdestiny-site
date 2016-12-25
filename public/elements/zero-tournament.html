@@ -394,7 +394,7 @@
           this._createModifierDetails(json);
           this.teams = this._createTeams(json);
           this.rounds = this._createRounds(json);
-          this._generateBracket();
+          this._generateBracket(json);
           root.querySelector('#rankings-table').items = this._createRankings(json);
           root.querySelector('#top-pages').selected = 1;
           root.querySelector('#waiting-spinner').active = 0;
@@ -472,40 +472,34 @@
         return result;
       },
 
-      _generateBracket: function() {
-        var data = [
-          [
-            {
-              "alphaName": "Game of Thorns",
-              "is_bye": true
-            },
-            {
-              "alphaName": "Shotgun Buffalo's",
-              "bravoName": "Team Blueberry",
-            },
-            {
-              "alphaName": "Felwinter is Coming",
-              "bravoName": "Team /dev/null",
-            },
-            {
-              "alphaName": "Team Bubblegum",
-              "is_bye": true
+      _generateBracket: function(json) {
+        var elimination = json['elimination'];
+        var result = [];
+        for (var i = 0; i < elimination.length; i++) {
+          var rawRound = elimination[i];
+          var round = [];
+          for (var j = 0; j < rawRound.length; j++) {
+            var rawMatch = rawRound[j];
+            var match = {};
+            var teamConverter = function(nick) {
+              if (nick in rawMatch) {
+                var team = rawMatch[nick];
+                match[nick + "Name"] = this.teamNames[team["id"]];
+                if ("score" in team) {
+                  match[nick + "Score"] = team["score"];
+                }
+              }
+            };
+            teamConverter.call(this, "alpha");
+            teamConverter.call(this, "bravo");
+            if (rawMatch["bye"]) {
+              match["is_bye"] = true;
             }
-          ],
-          [
-            {
-              "alphaName": "Game of Thorns",
-            },
-            {
-              "bravoName": "Team Bubblegum",
-            }
-          ],
-          [
-            {
-            }
-          ]
-        ];
-        this.$$("#bracket").rounds = data;
+            round.push(match);
+          }
+          result.push(round);
+        }
+        this.$$("#bracket").rounds = result;
       },
 
       _stopPropagation: function(e) {
