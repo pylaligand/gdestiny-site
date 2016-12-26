@@ -19,6 +19,11 @@
         padding: 0;
       }
 
+      li.selectable {
+        cursor: pointer;
+        cursor: hand;
+      }
+
       .game + li {
         flex-grow: 1;
       }
@@ -60,14 +65,14 @@
       <template is="dom-repeat" items="[[rounds]]" as="round">
         <ul>
           <template is="dom-repeat" items="{{round}}" as="match">
-            <li class$="{{_getAlphaClass(match)}}">
+            <li class$="{{_getAlphaClass(match)}}" on-click="_handleClick">
               {{_getAlphaTeamName(match)}}
               <template is="dom-if" if="{{_hasAlphaScore(match)}}">
                 <span>{{match.alphaScore}}</span>
               </template>
             </li>
-            <li>&nbsp;</li>
-            <li class$="{{_getBravoClass(match)}}">
+            <li class$="{{_getSeparatorClass(match)}}" on-click="_handleClick">&nbsp;</li>
+            <li class$="{{_getBravoClass(match)}}" on-click="_handleClick">
               {{_getBravoTeamName(match)}}
               <template is="dom-if" if="{{_hasBravoScore(match)}}">
                 <span>{{match.bravoScore}}</span>
@@ -89,6 +94,13 @@
         rounds: Array,
       },
 
+      _handleClick: function(e) {
+        var match = e.model.match;
+        if ("data" in match) {
+          this.fire('match-selected', match["data"]);
+        }
+      },
+
       _getWinner: function(match) {
         if ("winner" in match) {
           return match["winner"];
@@ -107,6 +119,9 @@
 
       _getTeamClass: function(match, forAlpha) {
         var baseClass = "game";
+        if ("data" in match) {
+          baseClass += " selectable";
+        }
         baseClass += forAlpha ? " game-top" : " game-bottom";
         var winner = this._getWinner(match);
         if (winner == null) {
@@ -125,6 +140,10 @@
 
       _getBravoClass: function(match) {
         return this._getTeamClass(match, false);
+      },
+
+      _getSeparatorClass: function(match) {
+        return "data" in match ? "selectable" : "";
       },
 
       _getTeamName: function(match, property) {

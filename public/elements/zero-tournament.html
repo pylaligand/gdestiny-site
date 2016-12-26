@@ -1,8 +1,12 @@
 <link rel="import" href="../components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../components/iron-icons/hardware-icons.html">
 <link rel="import" href="../components/iron-pages/iron-pages.html">
+<link rel="import" href="../components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/paper-card/paper-card.html">
+<link rel="import" href="../components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../components/paper-styles/color.html">
@@ -11,7 +15,6 @@
 <link rel="import" href="../components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
 <link rel="import" href="../components/vaadin-grid/vaadin-grid.html">
 
 <link rel="import" href="zero-bracket.html">
@@ -208,6 +211,22 @@
         justify-content: center;
       }
 
+      .bracket-games {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .bracket-game-details {
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      .bracket-game-title {
+        font-size: 20px;
+        color: #757575;
+      }
+
       #team-cards {
         width: 100%;
         text-align: center;
@@ -319,7 +338,35 @@
             <!-- Elimination stage -->
             <iron-page>
               <div id="bracket-wrapper">
-                <zero-bracket id="bracket"></zero-bracket>
+                <zero-bracket id="bracket" on-match-selected="_handleMatchSelected"></zero-bracket>
+                <paper-dialog id="bracket-match"
+                    entry-animation="scale-up-animation"
+                    exit-animation="fade-out-animation"
+                    with-backdrop
+                    >
+                  <div class="bracket-games">
+                    <div>
+                      <template is="dom-repeat" items="{{selectedEliminationMatch}}" as="game">
+                        <div class="bracket-game-details">
+                          <span class="bracket-game-title">
+                            Game {{game.number}}
+                          </span>
+                          <template is="dom-if" if="{{game.id}}">
+                            <a href="http://destinytracker.com/dg/{{game.id}}" target="_blank" on-click="_stopPropagation">
+                              <paper-icon-button icon="icons:exit-to-app"></paper-icon-button>
+                            </a>
+                          </template>
+                          <span>{{game.playlist}} on {{game.map}} with
+                            <span class="game-modifier">
+                              {{game.modifier.name}}
+                              <paper-tooltip>{{game.modifier.description}}</paper-tooltip>
+                            </span>
+                          </span>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </paper-dialog>
               </div>
             </iron-page>
 
@@ -361,6 +408,7 @@
         teamNames: Object,
         modifierDetails: Object,
         selectedTab: Number,
+        selectedEliminationMatch: Object,
       },
 
       getScoreBadgeClass: function(score) {
@@ -387,7 +435,7 @@
       ready: function() {
         var root = Polymer.dom(this.root);
 
-        this.selectedTab = 0;
+        this.selectedTab = 2;
         this.teamNames = {};
         this.modifierDetails = {};
         $.getJSON('https://gdestiny-server.herokuapp.com/' + this.tournament, function(json) {
@@ -430,6 +478,15 @@
           return teams;
       },
 
+      _prepareGames: function(games) {
+        for (var k = 0; k < games.length; k++) {
+          var game = games[k];
+          game['number'] = k + 1;
+          game['modifier'] = this.modifierDetails[game['modifier']];
+        }
+        return games;
+      },
+
       _createRounds: function(json) {
         var rounds = [];
         for (var i = 0; i < json['round-robin'].length; i++) {
@@ -444,12 +501,7 @@
             if (match.bravo.score == -1) {
               match.bravo.score = '-';
             }
-
-            for (var k = 0; k < match['games'].length; k++) {
-              var game = match['games'][k];
-              game['number'] = k + 1;
-              game['modifier'] = this.modifierDetails[game['modifier']];
-            }
+            this._prepareGames(match['games']);
           }
           rounds.push(round);
         }
@@ -495,11 +547,19 @@
             if (rawMatch["bye"]) {
               match["is_bye"] = true;
             }
+            if ("games" in rawMatch) {
+              match["data"] = this._prepareGames(rawMatch["games"]);
+            }
             round.push(match);
           }
           result.push(round);
         }
         this.$$("#bracket").rounds = result;
+      },
+
+      _handleMatchSelected: function(e) {
+        this.selectedEliminationMatch = e.detail;
+        this.$$("#bracket-match").open();
       },
 
       _stopPropagation: function(e) {
