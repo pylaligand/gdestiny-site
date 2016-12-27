@@ -1,5 +1,8 @@
-<link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../components/iron-pages/iron-pages.html">
+<link rel="import" href="../components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../components/polymer/polymer.html">
+
 <link rel="import" href="zero-stat.html">
 
 <dom-module id="zero-stats">
@@ -10,7 +13,7 @@
         --app-grid-columns: 2;
         --app-grid-gutter: 20px;
         /* Height is 100% the width of the item. This is equivalent to 1:1 aspect ratio */
-        --app-grid-item-height: 200px;
+        --app-grid-item-height: 182px;
       }
 
       paper-dialog-scrollable {
@@ -48,12 +51,17 @@
       Please note that stats apply to clan members active within the last 6 months.
     </p>
 
-    <ul class="app-grid" has-aspect-ratio>
-      <li><div class="stats-item"><zero-stat type="grimoire" name="Grimoire"></zero-stat></div></li>
-      <li><div class="stats-item"><zero-stat type="kd" name="K/D"></zero-stat></div></li>
-      <li><div class="stats-item"><zero-stat type="wins" name="Win %"></zero-stat></div></li>
-      <li><div class="stats-item"><zero-stat type="mot" name="Moments of Triumph"></zero-stat></div></li>
-    </ul>
+    <iron-pages id="content" selected="0">
+      <div id="waiting-area">
+        <paper-spinner active id="waiting-spinner"></paper-spinner>
+      </div>
+      <ul class="app-grid" has-aspect-ratio>
+        <li><div class="stats-item"><zero-stat id="stat-grimoire" type="grimoire" name="Grimoire"></zero-stat></div></li>
+        <li><div class="stats-item"><zero-stat id="stat-kd" type="kd" name="K/D"></zero-stat></div></li>
+        <li><div class="stats-item"><zero-stat id="stat-wins" type="wins" name="Win %"></zero-stat></div></li>
+        <li><div class="stats-item"><zero-stat id="stat-mot" type="mot" name="Y2 Triumphs %"></zero-stat></div></li>
+      </ul>
+    </iron-pages>
   </template>
   <script>
     Polymer({
@@ -68,6 +76,18 @@
 
       detached: function() {
         window.removeEventListener('resize', this._updateGridStyles);
+      },
+
+      ready: function() {
+        var root = Polymer.dom(this.root);
+        $.getJSON('https://gdestiny-server.herokuapp.com/summary', function(json) {
+          root.querySelector('#stat-grimoire').summaryData = json['grimoire'];
+          root.querySelector('#stat-kd').summaryData = json['kd'];
+          root.querySelector('#stat-wins').summaryData = json['win_percentage'];
+          root.querySelector('#stat-mot').summaryData = json['triumphs'];
+          root.querySelector('#content').selected = 1;
+          root.querySelector('#waiting-spinner').active = 0;
+        });
       },
     });
   </script>

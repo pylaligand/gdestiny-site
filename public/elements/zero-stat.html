@@ -16,15 +16,46 @@
         width: 100%;
       }
 
-      .stat img {
-        height: 96px;
-        width: 96px;
+      .showdown {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 150px;
       }
 
-      .stat h2 {
+      .inverted {
+        flex-direction: column-reverse;
+      }
+
+      .showdown h2 {
         font-weight: 200;
-        margin-bottom: 0;
-        width: 100%;
+        margin: 0;
+        align-self: center;
+      }
+
+      .side {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 30px;
+        align-self: stretch;
+      }
+
+      .xb {
+        background-color: #64DD17;
+        text-align: left;
+        padding-left: 20px;
+      }
+
+      .ps {
+        background-color: #3366CC;
+        text-align: right;
+        padding-right: 20px;
+      }
+
+      .score {
+        font-size: 20px;
+        color: #fff;
+        font-weight: 400;
       }
 
       .dialog {
@@ -49,12 +80,21 @@
       }
 
     </style>
+
     <paper-card id="{{type}}" class="stat">
       <div class="card-content">
-        <h2>[[name]]</h2>
-        <img src="/images/icon_{{type}}.svg" />
+        <div class$="{{_getContainerClass(summaryData)}}">
+          <div class="xb side">
+            <div class="score">{{summaryData.xb}}</div>
+          </div>
+          <h2>[[name]]</h2>
+          <div class="ps side">
+            <div class="score">{{summaryData.ps}}</div>
+          </div>
+        </div>
       </div>
     </paper-card>
+
     <paper-dialog id="{{type}}-dialog"
                   class="dialog"
                   entry-animation="scale-up-animation"
@@ -72,13 +112,16 @@
         <paper-button dialog-dismiss>Close</paper-button>
       </div>
     </paper-dialog>
+
   </template>
+
   <script>
     Polymer({
       is: 'zero-stat',
       properties: {
         type: String,
         name: String,
+        summaryData: Object,
         _chartOptions: Array,
         _chartCols: Array,
         _chartData: Array,
@@ -92,6 +135,15 @@
 
       ready: function() {
         this._setClickHandlers();
+      },
+
+      _getContainerClass: function(data) {
+        var baseClass = 'showdown';
+        console.log(data.ps + ' / ' + data.xb);
+        if (data && data.ps > data.xb) {
+          baseClass += ' inverted';
+        }
+        return baseClass;
       },
 
       _getChartOptions: function(length) {
