@@ -36,6 +36,7 @@
         <div class="stats-item"><zero-stat id="stat-kd" type="kd" name="K/D"></zero-stat></div>
         <div class="stats-item"><zero-stat id="stat-wins" type="wins" name="Win %"></zero-stat></div>
         <div class="stats-item"><zero-stat id="stat-mot" type="mot" name="Y2 Triumphs %"></zero-stat></div>
+        <div class="stats-item"><zero-stat id="stat-lighthouse" type="lighthouse" name="Lighthouse trips"></zero-stat></div>
       </div>
     </iron-pages>
   </template>
@@ -61,6 +62,7 @@
           root.querySelector('#stat-kd').summaryData = json['kd'];
           root.querySelector('#stat-wins').summaryData = json['win_percentage'];
           root.querySelector('#stat-mot').summaryData = json['triumphs'];
+          root.querySelector('#stat-lighthouse').summaryData = json['lighthouse_trips'];
           root.querySelector('#content').selected = 1;
           root.querySelector('#waiting-spinner').active = 0;
         });

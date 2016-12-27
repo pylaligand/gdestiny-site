@@ -139,7 +139,6 @@
 
       _getContainerClass: function(data) {
         var baseClass = 'showdown';
-        console.log(data.ps + ' / ' + data.xb);
         if (data && data.ps > data.xb) {
           baseClass += ' inverted';
         }
@@ -278,6 +277,31 @@
         }.bind(this));
       },
 
+      _loadLighthouseData: function() {
+        $.getJSON('https://gdestiny-server.herokuapp.com/lighthouse', function(json) {
+          this._chartOptions = this._getChartOptions(json.length);
+          var rows = [[
+            'Guardian',
+            '# of Lighthouse trips',
+            { role: 'style' },
+            { role: 'annotation' }
+          ]];
+          $.each(json, function(index, value) {
+            var platform = value.platform;
+            var count = value.count;
+
+            var color = platform == "xb" ? "#64DD17" : "#3366CC";
+            rows.push([
+                value.name,
+                count,
+                color,
+                count.toLocaleString(),
+            ]);
+          });
+          this._chartData = rows;
+        }.bind(this));
+      },
+
       _setClickHandlers: function() {
         var statsCard = this._root.querySelector('#' + this.type);
         statsCard.addEventListener('click', function() {
@@ -294,6 +318,8 @@
           this._loadKDData();
         } else if (this.type == 'wins') {
           this._loadWinsData();
+        } else if (this.type == 'lighthouse') {
+          this._loadLighthouseData();
         }
         var dialog = document.getElementById(this.type + '-dialog');
         dialog.open();
