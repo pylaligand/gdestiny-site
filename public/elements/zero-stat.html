@@ -11,9 +11,13 @@
   <template>
     <style>
       .stat {
-        cursor: pointer;
         display: block;
         width: 250px;
+      }
+
+      .clickable {
+        cursor: pointer;
+        cursor: hand;
       }
 
       .showdown {
@@ -95,23 +99,25 @@
       </div>
     </paper-card>
 
-    <paper-dialog id="{{type}}-dialog"
-                  class="dialog"
-                  entry-animation="scale-up-animation"
-                  exit-animation="fade-out-animation"
-                  on-iron-overlay-closed="_closeDialog"
-                  with-backdrop>
-        <h1 class="title">[[name]]</h1>
-        <paper-dialog-scrollable>
-          <google-chart type="bar"
-                        options="[[_chartOptions]]"
-                        data="[[_chartData]]">
-          </google-chart>
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Close</paper-button>
-      </div>
-    </paper-dialog>
+    <template is="dom-if" if="{{!noDialog}}">
+      <paper-dialog id="{{type}}-dialog"
+                    class="dialog"
+                    entry-animation="scale-up-animation"
+                    exit-animation="fade-out-animation"
+                    on-iron-overlay-closed="_closeDialog"
+                    with-backdrop>
+          <h1 class="title">[[name]]</h1>
+          <paper-dialog-scrollable>
+            <google-chart type="bar"
+                          options="[[_chartOptions]]"
+                          data="[[_chartData]]">
+            </google-chart>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Close</paper-button>
+        </div>
+      </paper-dialog>
+    </template>
 
   </template>
 
@@ -122,6 +128,11 @@
         type: String,
         name: String,
         summaryData: Object,
+        noDialog: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        },
         _chartOptions: Array,
         _chartCols: Array,
         _chartData: Array,
@@ -134,7 +145,10 @@
       },
 
       ready: function() {
-        this._setClickHandlers();
+        if (!this.noDialog) {
+          this._setClickHandlers();
+          this.$$('.stat').className += " clickable";
+        }
       },
 
       _getContainerClass: function(data) {
@@ -337,7 +351,6 @@
         html.data('previous-overflow', html.css('overflow'));
         html.css('overflow', 'hidden');
         window.scrollTo(this.scrollPosition[0], this.scrollPosition[1]);
-
       },
 
       _closeDialog: function() {

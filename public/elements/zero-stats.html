@@ -21,8 +21,8 @@
     </style>
 
     <p>
-      Want to compare yourself to your fellow Guardians?  Well you've come to the right place.  Select a stat to
-      get a more comprehensive view and see where you stack rank.
+      At Hundred Zeros we like numbers... and bragging rights. Here's a collection
+      of statistics to check how you measure up against your fellow Guardians.
       <br />
       Please note that stats apply to clan members active within the last 6 months.
     </p>
@@ -32,6 +32,7 @@
         <paper-spinner active id="waiting-spinner"></paper-spinner>
       </div>
       <div class="stats">
+        <div class="stats-item"><zero-stat id="stat-players" type="players" no-dialog name="Active players"></zero-stat></div>
         <div class="stats-item"><zero-stat id="stat-grimoire" type="grimoire" name="Grimoire"></zero-stat></div>
         <div class="stats-item"><zero-stat id="stat-kd" type="kd" name="K/D"></zero-stat></div>
         <div class="stats-item"><zero-stat id="stat-wins" type="wins" name="Win %"></zero-stat></div>
@@ -58,6 +59,7 @@
       ready: function() {
         var root = Polymer.dom(this.root);
         $.getJSON('https://gdestiny-server.herokuapp.com/summary', function(json) {
+          root.querySelector('#stat-players').summaryData = json['players'];
           root.querySelector('#stat-grimoire').summaryData = json['grimoire'];
           root.querySelector('#stat-kd').summaryData = json['kd'];
           root.querySelector('#stat-wins').summaryData = json['win_percentage'];
