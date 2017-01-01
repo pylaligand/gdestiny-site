@@ -24,6 +24,10 @@
         cursor: hand;
       }
 
+      li.selectable:hover {
+        background-color: #eee;
+      }
+
       .game + li {
         flex-grow: 1;
       }
@@ -119,9 +123,6 @@
 
       _getTeamClass: function(match, forAlpha) {
         var baseClass = "game";
-        if ("data" in match) {
-          baseClass += " selectable";
-        }
         baseClass += forAlpha ? " game-top" : " game-bottom";
         var winner = this._getWinner(match);
         if (winner == null) {
